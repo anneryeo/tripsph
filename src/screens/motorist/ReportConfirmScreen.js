@@ -185,6 +185,13 @@ export default function ReportConfirmScreen({ navigation, route }) {
               GPS {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
             </Text>
             <Text style={styles.metaText}>UTC {new Date(timestamp).toUTCString()}</Text>
+
+            <View style={styles.nextStepsBox}>
+              <Text style={styles.nextStepsTitle}>What happens after submit</Text>
+              <Text style={styles.nextStepsItem}>1. MMDA receives your evidence package.</Text>
+              <Text style={styles.nextStepsItem}>2. AI-verified reports are prioritized for enforcement.</Text>
+              <Text style={styles.nextStepsItem}>3. Low-confidence cases enter manual enforcer review.</Text>
+            </View>
           </Card>
         )}
 
@@ -391,6 +398,25 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   metaText: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    marginBottom: 2,
+  },
+  nextStepsBox: {
+    marginTop: Spacing.sm,
+    padding: Spacing.sm,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    backgroundColor: Colors.surfaceBase,
+  },
+  nextStepsTitle: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    marginBottom: 4,
+    fontWeight: '700',
+  },
+  nextStepsItem: {
     ...Typography.caption,
     color: Colors.textSecondary,
     marginBottom: 2,

@@ -46,6 +46,10 @@ export default function ReportDetailScreen({ navigation, route }) {
 
   const timeRemaining = Math.max(0, Targets.enforcerResponseTimeSec - elapsed);
   const timerColor = timeRemaining < 60 ? Colors.alarmRed : timeRemaining < 120 ? Colors.orange : Colors.grayGreen;
+  const responsePct = Math.min(100, (elapsed / Targets.enforcerResponseTimeSec) * 100);
+  const recommendedAction = report?.aiVerified && (report?.confidence ?? 0) >= 0.85
+    ? 'Issue NCAP first, dispatch tow only if obstruction persists.'
+    : 'Review evidence and validate lane obstruction before issuing NCAP.';
 
   const handleDispatchTow = async () => {
     setActionLoading('tow');
@@ -126,9 +130,13 @@ export default function ReportDetailScreen({ navigation, route }) {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.photoCard}>
           <View style={styles.photoPlaceholder}>
-            <Text style={styles.photoGlyph}>EVIDENCE</Text>
-            <Text style={styles.photoCaption}>Citizen Photo Evidence</Text>
-            {!report?.photoUrl && <Text style={styles.photoSub}>Photo stored on MMDA backend</Text>}
+            <Text style={styles.photoGlyph}>MMDA CASE EVIDENCE</Text>
+            <Text style={styles.photoCaption}>{report?.violationType ?? 'Violation pending classification'}</Text>
+            <View style={styles.mockPlateRow}>
+              <Text style={styles.mockPlateLabel}>Plate</Text>
+              <Text style={styles.mockPlateValue}>{report?.plateNumber ?? 'UNKNOWN'}</Text>
+            </View>
+            <Text style={styles.photoSub}>{report?.address ?? 'Location unavailable'}</Text>
           </View>
 
           {report?.aiVerified && (
@@ -137,6 +145,16 @@ export default function ReportDetailScreen({ navigation, route }) {
             </View>
           )}
         </View>
+
+        <Card style={styles.guidanceCard}>
+          <Text style={styles.guidanceTitle}>Recommended Next Step</Text>
+          <Text style={styles.guidanceBody}>{recommendedAction}</Text>
+          <View style={styles.guidanceBullets}>
+            <Text style={styles.guidanceItem}>1. Validate plate and zone match.</Text>
+            <Text style={styles.guidanceItem}>2. Choose NCAP or tow dispatch.</Text>
+            <Text style={styles.guidanceItem}>3. Mark false alarm only with clear conflict.</Text>
+          </View>
+        </Card>
 
         <Card style={styles.detailCard}>
           <View style={styles.detailRow}>
@@ -183,12 +201,13 @@ export default function ReportDetailScreen({ navigation, route }) {
               style={[
                 styles.timerBarFill,
                 {
-                  width: `${Math.min(100, (elapsed / Targets.enforcerResponseTimeSec) * 100)}%`,
+                    width: `${responsePct}%`,
                   backgroundColor: timerColor,
                 },
               ]}
             />
           </View>
+            <Text style={styles.timerMeta}>{Math.round(responsePct)}% of response window used</Text>
         </Card>
 
         {actionDone ? (
@@ -334,11 +353,33 @@ const styles = StyleSheet.create({
     ...Typography.bodyBold,
     color: Colors.grayGreen,
     marginTop: Spacing.xs,
+    textAlign: 'center',
+  },
+  mockPlateRow: {
+    marginTop: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.sm,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs,
+    backgroundColor: Colors.surfaceBase,
+  },
+  mockPlateLabel: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+  },
+  mockPlateValue: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+    letterSpacing: 1.5,
+    textAlign: 'center',
   },
   photoSub: {
     ...Typography.caption,
-    color: Colors.surfaceMuted,
-    marginTop: 4,
+    color: Colors.textSecondary,
+    marginTop: Spacing.sm,
+    textAlign: 'center',
   },
   aiBadge: {
     position: 'absolute',
@@ -399,6 +440,27 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
   },
+  guidanceCard: {
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  guidanceTitle: {
+    ...Typography.label,
+    color: Colors.textPrimary,
+    marginBottom: Spacing.xs,
+  },
+  guidanceBody: {
+    ...Typography.body,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.sm,
+  },
+  guidanceBullets: {
+    gap: 4,
+  },
+  guidanceItem: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+  },
   timerCardTitle: {
     ...Typography.label,
     color: Colors.textPrimary,
@@ -417,6 +479,11 @@ const styles = StyleSheet.create({
   timerTarget: {
     ...Typography.caption,
     color: Colors.textSecondary,
+  },
+  timerMeta: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    marginTop: 6,
   },
   timerBarBg: {
     height: 6,
