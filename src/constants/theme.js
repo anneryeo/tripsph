@@ -3,6 +3,8 @@
  * Color palette, typography, and layout tokens.
  */
 
+import { Platform } from 'react-native';
+
 // ── Color Palette ──────────────────────────────────────────────────────────────
 export const Colors = {
   // Core background / surface
@@ -40,7 +42,10 @@ export const Colors = {
 };
 
 // ── Typography ─────────────────────────────────────────────────────────────────
-const FONT_FAMILY = 'Canva Sans';
+const FONT_FAMILY = Platform.select({
+  web: 'Canva Sans, Segoe UI, Helvetica Neue, Arial, sans-serif',
+  default: 'Canva Sans',
+});
 const LETTER_SPACING = -0.94;
 
 export const Typography = {

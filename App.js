@@ -12,13 +12,21 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import { Colors } from './src/constants/theme';
+
+if (Platform.OS === 'web') {
+  Text.defaultProps = Text.defaultProps || {};
+  Text.defaultProps.style = [
+    Text.defaultProps.style,
+    { fontFamily: 'Canva Sans, Segoe UI, Helvetica Neue, Arial, sans-serif' },
+  ];
+}
 
 export default function App() {
   const isWeb = Platform.OS === 'web';

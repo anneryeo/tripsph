@@ -94,8 +94,24 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
 
       {view === 'map' ? (
         <View style={styles.mapPlaceholder}>
-          <Text style={styles.placeholderTitle}>Web Prototype Map Placeholder</Text>
-          <Text style={styles.placeholderSub}>Open mobile build for live pin/map interactions.</Text>
+          <View style={styles.incidentMap}>
+            <View style={styles.incidentRoad} />
+            <View style={[styles.incidentPin, styles.incidentAi]}>
+              <Text style={styles.pinGlyph}>AI</Text>
+            </View>
+            <View style={[styles.incidentPin, styles.incidentManual]}>
+              <Text style={styles.pinGlyph}>M</Text>
+            </View>
+            <View style={[styles.incidentPin, styles.incidentTow]}>
+              <Text style={styles.pinGlyph}>T</Text>
+            </View>
+            <View style={styles.legendWrap}>
+              <Text style={styles.legendText}>AI Verified</Text>
+              <Text style={styles.legendText}>Manual Review</Text>
+            </View>
+          </View>
+          <Text style={styles.placeholderTitle}>Enforcer Incident Preview</Text>
+          <Text style={styles.placeholderSub}>Pin priority and queue semantics are visible on web while live map layers stay native-focused.</Text>
         </View>
       ) : (
         <FlatList
@@ -199,8 +215,76 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderSoft,
     backgroundColor: Colors.whiteTranslucent,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     padding: Spacing.xl,
+  },
+  incidentMap: {
+    width: '100%',
+    flex: 1,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    backgroundColor: '#e6f2ef',
+    marginBottom: Spacing.md,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  incidentRoad: {
+    position: 'absolute',
+    width: '88%',
+    height: 16,
+    top: '48%',
+    left: '6%',
+    borderRadius: Radius.full,
+    backgroundColor: 'rgba(31,82,92,0.2)',
+    transform: [{ rotate: '-8deg' }],
+  },
+  incidentPin: {
+    position: 'absolute',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.white,
+  },
+  incidentAi: {
+    top: '28%',
+    left: '22%',
+    backgroundColor: Colors.alarmRed,
+  },
+  incidentManual: {
+    top: '58%',
+    left: '50%',
+    backgroundColor: Colors.gray,
+  },
+  incidentTow: {
+    top: '22%',
+    right: '18%',
+    backgroundColor: Colors.azure,
+  },
+  pinGlyph: {
+    ...Typography.caption,
+    color: Colors.white,
+    fontWeight: '800',
+    fontSize: 10,
+  },
+  legendWrap: {
+    position: 'absolute',
+    left: Spacing.sm,
+    bottom: Spacing.sm,
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    borderRadius: Radius.sm,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+  },
+  legendText: {
+    ...Typography.caption,
+    color: Colors.textPrimary,
+    fontSize: 10,
   },
   placeholderTitle: {
     ...Typography.heading3,

@@ -58,8 +58,20 @@ export default function NavigationModeScreen({ navigation, route }) {
           <Text style={styles.etaTime}>{eta}</Text>
           <Text style={styles.etaDist}>{distance}</Text>
         </View>
-        <Text style={styles.placeholderTitle}>Web Prototype Map Placeholder</Text>
-        <Text style={styles.placeholderSub}>Use Android/iOS build for live route map interactions.</Text>
+        <View style={styles.routeMap}>
+          <View style={styles.routePath} />
+          <View style={[styles.routeNode, styles.routeStart]}>
+            <Text style={styles.routeNodeText}>S</Text>
+          </View>
+          <View style={[styles.routeNode, styles.routeEnd]}>
+            <Text style={styles.routeNodeText}>D</Text>
+          </View>
+          <View style={[styles.routeNode, styles.routeRisk]}>
+            <Text style={styles.routeNodeText}>!</Text>
+          </View>
+        </View>
+        <Text style={styles.placeholderTitle}>Navigation Risk Preview</Text>
+        <Text style={styles.placeholderSub}>Route and enforcement risk hints are shown on web while turn-by-turn map remains native-first.</Text>
       </View>
 
       <View style={[styles.riskBanner, { backgroundColor: bannerColor }]}> 
@@ -126,6 +138,57 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: Spacing.xl,
     position: 'relative',
+  },
+  routeMap: {
+    width: '100%',
+    flex: 1,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    backgroundColor: '#e6f2ef',
+    marginBottom: Spacing.md,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  routePath: {
+    position: 'absolute',
+    width: '76%',
+    height: 6,
+    top: '54%',
+    left: '12%',
+    backgroundColor: Colors.azure,
+    borderRadius: Radius.full,
+    transform: [{ rotate: '-14deg' }],
+  },
+  routeNode: {
+    position: 'absolute',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.white,
+  },
+  routeStart: {
+    bottom: '22%',
+    left: '15%',
+    backgroundColor: Colors.grayGreen,
+  },
+  routeEnd: {
+    top: '24%',
+    right: '14%',
+    backgroundColor: Colors.azure,
+  },
+  routeRisk: {
+    top: '43%',
+    left: '52%',
+    backgroundColor: Colors.alarmRed,
+  },
+  routeNodeText: {
+    ...Typography.caption,
+    color: Colors.white,
+    fontWeight: '800',
   },
   etaCard: {
     position: 'absolute',

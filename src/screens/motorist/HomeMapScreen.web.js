@@ -75,8 +75,27 @@ export default function HomeMapScreen({ navigation }) {
 
       <View style={styles.mapPlaceholderWrap}>
         <View style={styles.mapPlaceholder}>
-          <Text style={styles.mapTitle}>Map Preview Unavailable on Web Build</Text>
-          <Text style={styles.mapSub}>Native map interactions are available on Android/iOS builds.</Text>
+          <View style={styles.mapGrid}>
+            <View style={[styles.road, styles.roadHorizontal]} />
+            <View style={[styles.road, styles.roadVertical]} />
+            <View style={[styles.zone, styles.zoneLegal]}>
+              <Text style={styles.zoneText}>LEGAL</Text>
+            </View>
+            <View style={[styles.zone, styles.zoneRisk]}>
+              <Text style={styles.zoneText}>RISK</Text>
+            </View>
+            <View style={[styles.zone, styles.zoneIllegal]}>
+              <Text style={styles.zoneText}>ILLEGAL</Text>
+            </View>
+            <View style={[styles.pin, styles.pinParking]}>
+              <Text style={styles.pinText}>P</Text>
+            </View>
+            <View style={[styles.pin, styles.pinAlert]}>
+              <Text style={styles.pinText}>!</Text>
+            </View>
+          </View>
+          <Text style={styles.mapTitle}>Live Risk Map Preview</Text>
+          <Text style={styles.mapSub}>Web preview mirrors zoning and marker semantics while native maps remain fully interactive.</Text>
         </View>
 
         <TouchableOpacity
@@ -173,8 +192,87 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderSoft,
     backgroundColor: Colors.whiteTranslucent,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     padding: Spacing.xl,
+  },
+  mapGrid: {
+    width: '100%',
+    flex: 1,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    backgroundColor: '#e6f2ef',
+    position: 'relative',
+    overflow: 'hidden',
+    marginBottom: Spacing.md,
+  },
+  road: {
+    position: 'absolute',
+    backgroundColor: 'rgba(31,82,92,0.2)',
+  },
+  roadHorizontal: {
+    height: 20,
+    left: 0,
+    right: 0,
+    top: '42%',
+  },
+  roadVertical: {
+    width: 20,
+    top: 0,
+    bottom: 0,
+    left: '54%',
+  },
+  zone: {
+    position: 'absolute',
+    borderRadius: Radius.sm,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+  },
+  zoneLegal: {
+    top: 14,
+    left: 14,
+    backgroundColor: Colors.grayGreenTranslucent,
+  },
+  zoneRisk: {
+    top: 14,
+    right: 14,
+    backgroundColor: Colors.orangeTranslucent,
+  },
+  zoneIllegal: {
+    bottom: 14,
+    right: 14,
+    backgroundColor: Colors.alarmRedTranslucent,
+  },
+  zoneText: {
+    ...Typography.caption,
+    color: Colors.textPrimary,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  pin: {
+    position: 'absolute',
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.white,
+  },
+  pinParking: {
+    top: '58%',
+    left: '28%',
+    backgroundColor: Colors.azure,
+  },
+  pinAlert: {
+    top: '30%',
+    left: '67%',
+    backgroundColor: Colors.alarmRed,
+  },
+  pinText: {
+    ...Typography.caption,
+    color: Colors.white,
+    fontWeight: '800',
   },
   mapTitle: {
     ...Typography.heading3,
