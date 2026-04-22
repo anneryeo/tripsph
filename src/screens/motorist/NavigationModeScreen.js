@@ -45,6 +45,7 @@ const INITIAL_REGION = {
 };
 
 const TAB_BAR_CLEARANCE = 96;
+const ETA_CARD_HEIGHT = 64;
 
 const darkMapStyle = [
   { elementType: 'geometry', stylers: [{ color: '#163b42' }] },
@@ -282,6 +283,7 @@ const styles = StyleSheet.create({
     margin: Spacing.md,
     borderRadius: Radius.xl,
     overflow: 'hidden',
+    paddingTop: ETA_CARD_HEIGHT,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -297,6 +299,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.edgeHighlight,
+    zIndex: 5,
+    elevation: 5,
   },
   zoomControls: {
     position: 'absolute',

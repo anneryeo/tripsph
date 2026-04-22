@@ -16,6 +16,7 @@ const DESTINATION = {
 };
 
 const TAB_BAR_CLEARANCE = 96;
+const ETA_CARD_HEIGHT = 64;
 
 export default function NavigationModeScreen({ navigation, route }) {
   const initialVerdict = route.params?.verdict ?? null;
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: Spacing.xl,
+    paddingTop: Spacing.xl + ETA_CARD_HEIGHT,
     position: 'relative',
   },
   routeMap: {
@@ -213,6 +215,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.edgeHighlight,
+    zIndex: 5,
   },
   etaTime: {
     fontSize: 22,
