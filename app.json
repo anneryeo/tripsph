@@ -4,11 +4,11 @@
     "slug": "tripsph",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/TRIPSPH-icon-white.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/TRIPSPH-logo-white.png",
       "resizeMode": "contain",
       "backgroundColor": "#163b42"
     },
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/TRIPSPH-icon-white.png",
         "backgroundColor": "#163b42"
       },
       "edgeToEdgeEnabled": true,
@@ -36,7 +36,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/TRIPSPH-icon-white.png",
       "bundler": "metro"
     },
     "plugins": [

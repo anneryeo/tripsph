@@ -9,6 +9,7 @@ import React from 'react';
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
@@ -24,10 +25,12 @@ export default function RoleSelectScreen({ navigation }) {
       {/* ── Logo / Brand ── */}
       <View style={styles.brand}>
         <View style={styles.logoBadge}>
-          <View style={styles.logoDot} />
-          <Text style={styles.logoText}>TRIPS</Text>
+          <Image
+            source={require('../../assets/TRIPSPH-logo-white.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
         </View>
-        <Text style={styles.appName}>TRIPS PH</Text>
         <Text style={styles.tagline}>
           Traffic Routing & Intelligent Parking System
         </Text>
@@ -106,40 +109,25 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   logoBadge: {
-    minWidth: 132,
-    height: 54,
-    borderRadius: Radius.full,
-    backgroundColor: Colors.surfaceBase,
+    width: 228,
+    height: 72,
+    borderRadius: Radius.lg,
+    backgroundColor: Colors.azure,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
     paddingHorizontal: Spacing.md,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.azureLight,
     shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.14,
     shadowRadius: 18,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },
-  logoDot: {
-    width: 10,
-    height: 10,
-    borderRadius: Radius.full,
-    marginRight: 10,
-    backgroundColor: Colors.grayGreen,
-  },
-  logoText: {
-    color: Colors.azure,
-    fontWeight: '800',
-    letterSpacing: 2,
-  },
-  appName: {
-    fontSize: 36,
-    fontWeight: '900',
-    color: Colors.textPrimary,
-    letterSpacing: 2,
+  logoImage: {
+    width: '90%',
+    height: '74%',
   },
   tagline: {
     ...Typography.bodyBold,
