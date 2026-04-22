@@ -74,6 +74,8 @@ Core style cues:
 
 Tone: crisp, legible, and practical. Prioritize readability over stylization.
 
+### Font: Canva Sans (-94 Letter Spacing, 1.4 Line Spacing)
+
 ### Type Scale
 
 - Display: 32 / 700 / line-height 38

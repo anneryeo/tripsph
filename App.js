@@ -12,7 +12,7 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -21,31 +21,53 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { Colors } from './src/constants/theme';
 
 export default function App() {
+  const isWeb = Platform.OS === 'web';
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer
-        theme={{
-          dark: true,
-          colors: {
-            primary:      Colors.grayGreen,
-            background:   Colors.darkAzure,
-            card:         Colors.azure,
-            text:         Colors.white,
-            border:       Colors.grayDark,
-            notification: Colors.alarmRed,
-          },
-        }}
-      >
-        <SafeAreaView style={styles.appSafeArea} edges={['top']}>
-          <StatusBar style="light" backgroundColor={Colors.darkAzure} translucent={false} />
-          <AppNavigator />
-        </SafeAreaView>
-      </NavigationContainer>
+      <View style={styles.root}>
+        <View style={[styles.appFrame, isWeb && styles.webFrame]}>
+          <NavigationContainer
+            theme={{
+              dark: true,
+              colors: {
+                primary:      Colors.grayGreen,
+                background:   Colors.darkAzure,
+                card:         Colors.azure,
+                text:         Colors.white,
+                border:       Colors.grayDark,
+                notification: Colors.alarmRed,
+              },
+            }}
+          >
+            <SafeAreaView style={styles.appSafeArea} edges={['top']}>
+              <StatusBar style="light" backgroundColor={Colors.darkAzure} translucent={false} />
+              <AppNavigator />
+            </SafeAreaView>
+          </NavigationContainer>
+        </View>
+      </View>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: Colors.darkAzure,
+  },
+  appFrame: {
+    flex: 1,
+    width: '100%',
+  },
+  webFrame: {
+    maxWidth: 430,
+    alignSelf: 'center',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: Colors.borderSoft,
+    backgroundColor: Colors.darkAzure,
+  },
   appSafeArea: {
     flex: 1,
   },
