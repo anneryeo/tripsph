@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   zoomControls: {
     position: 'absolute',
     right: Spacing.sm,
-    bottom: 88,
+    bottom: Spacing.md,
     gap: Spacing.xs,
   },
   zoomBtn: {
