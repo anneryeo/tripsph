@@ -40,14 +40,66 @@ export const Colors = {
 };
 
 // ── Typography ─────────────────────────────────────────────────────────────────
+const FONT_FAMILY = 'Canva Sans';
+const LETTER_SPACING = -0.94;
+
 export const Typography = {
-  heading1: { fontSize: 24, fontWeight: '700', color: Colors.white },
-  heading2: { fontSize: 20, fontWeight: '700', color: Colors.white },
-  heading3: { fontSize: 18, fontWeight: '600', color: Colors.white },
-  body:     { fontSize: 14, fontWeight: '400', color: Colors.white },
-  bodyBold: { fontSize: 14, fontWeight: '700', color: Colors.white },
-  caption:  { fontSize: 12, fontWeight: '400', color: Colors.gray },
-  label:    { fontSize: 13, fontWeight: '600', color: Colors.white },
+  heading1: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 24,
+    lineHeight: Math.round(24 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  heading2: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 20,
+    lineHeight: Math.round(20 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  heading3: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 18,
+    lineHeight: Math.round(18 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  body: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 14,
+    lineHeight: Math.round(14 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '400',
+    color: Colors.white,
+  },
+  bodyBold: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 14,
+    lineHeight: Math.round(14 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  caption: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 12,
+    lineHeight: Math.round(12 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '400',
+    color: Colors.gray,
+  },
+  label: {
+    fontFamily: FONT_FAMILY,
+    fontSize: 13,
+    lineHeight: Math.round(13 * 1.4),
+    letterSpacing: LETTER_SPACING,
+    fontWeight: '700',
+    color: Colors.white,
+  },
 };
 
 // ── Spacing ────────────────────────────────────────────────────────────────────
