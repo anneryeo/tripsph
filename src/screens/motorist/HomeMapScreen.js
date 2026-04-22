@@ -41,6 +41,7 @@ export default function HomeMapScreen({ navigation }) {
   const [verdict, setVerdict] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
   const [connected, setConnected] = useState(false);
+  const [mapRegion, setMapRegion] = useState(DEFAULT_REGION);
   const zones = getOrdinanceZones();
   const mapRef = useRef(null);
   const refreshTimer = useRef(null);
@@ -100,6 +101,17 @@ export default function HomeMapScreen({ navigation }) {
     ? getBannerText(verdict.verdict)
     : 'Querying Ordinance Intelligence Engine...';
 
+  const zoomMap = (factor) => {
+    if (!mapRef.current || !mapRegion) return;
+    const nextRegion = {
+      ...mapRegion,
+      latitudeDelta: Math.min(2, Math.max(0.002, mapRegion.latitudeDelta * factor)),
+      longitudeDelta: Math.min(2, Math.max(0.002, mapRegion.longitudeDelta * factor)),
+    };
+    mapRef.current.animateToRegion(nextRegion, 180);
+    setMapRegion(nextRegion);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
@@ -123,6 +135,7 @@ export default function HomeMapScreen({ navigation }) {
           customMapStyle={darkMapStyle}
           showsUserLocation
           showsMyLocationButton={false}
+          onRegionChangeComplete={setMapRegion}
         >
           {zones.map((zone) => (
             <Circle
@@ -174,6 +187,25 @@ export default function HomeMapScreen({ navigation }) {
             <Text style={styles.legendP}>P</Text>
             <Text style={styles.legendText}>Parking</Text>
           </View>
+        </View>
+
+        <View style={styles.zoomControls}>
+          <TouchableOpacity
+            style={styles.zoomBtn}
+            onPress={() => zoomMap(0.7)}
+            accessibilityRole="button"
+            accessibilityLabel="Zoom in"
+          >
+            <Text style={styles.zoomBtnText}>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.zoomBtn}
+            onPress={() => zoomMap(1.4)}
+            accessibilityRole="button"
+            accessibilityLabel="Zoom out"
+          >
+            <Text style={styles.zoomBtnText}>-</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
@@ -279,6 +311,28 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
     borderWidth: 1,
     borderColor: Colors.borderSoft,
+  },
+  zoomControls: {
+    position: 'absolute',
+    right: Spacing.sm,
+    bottom: 88,
+    gap: Spacing.xs,
+  },
+  zoomBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  zoomBtnText: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+    fontSize: 20,
+    lineHeight: 20,
   },
   legendItem: {
     flexDirection: 'row',

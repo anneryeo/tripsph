@@ -59,7 +59,9 @@ export default function NavigationModeScreen({ navigation, route }) {
   const [verdict, setVerdict] = useState(initialVerdict);
   const [eta, setEta] = useState('12 min');
   const [distance, setDistance] = useState('4.2 km');
+  const [mapRegion, setMapRegion] = useState(INITIAL_REGION);
   const flashAnim = useRef(new Animated.Value(1)).current;
+  const mapRef = useRef(null);
   const zones = getOrdinanceZones();
 
   // ── Poll OIE every 30 s while navigating ─────────────────────────────────
@@ -115,6 +117,17 @@ export default function NavigationModeScreen({ navigation, route }) {
     }
   };
 
+  const zoomMap = (factor) => {
+    if (!mapRef.current || !mapRegion) return;
+    const nextRegion = {
+      ...mapRegion,
+      latitudeDelta: Math.min(2, Math.max(0.002, mapRegion.latitudeDelta * factor)),
+      longitudeDelta: Math.min(2, Math.max(0.002, mapRegion.longitudeDelta * factor)),
+    };
+    mapRef.current.animateToRegion(nextRegion, 180);
+    setMapRegion(nextRegion);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
@@ -134,10 +147,12 @@ export default function NavigationModeScreen({ navigation, route }) {
       {/* ── Map ── */}
       <View style={styles.mapContainer}>
         <MapView
+          ref={mapRef}
           style={styles.map}
           initialRegion={INITIAL_REGION}
           customMapStyle={darkMapStyle}
           showsUserLocation
+          onRegionChangeComplete={setMapRegion}
         >
           {/* Ordinance zones */}
           {zones.map((zone) => (
@@ -163,6 +178,25 @@ export default function NavigationModeScreen({ navigation, route }) {
         <View style={styles.etaCard}>
           <Text style={styles.etaTime}>{eta}</Text>
           <Text style={styles.etaDist}>{distance}</Text>
+        </View>
+
+        <View style={styles.zoomControls}>
+          <TouchableOpacity
+            style={styles.zoomBtn}
+            onPress={() => zoomMap(0.7)}
+            accessibilityRole="button"
+            accessibilityLabel="Zoom in"
+          >
+            <Text style={styles.zoomBtnText}>+</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.zoomBtn}
+            onPress={() => zoomMap(1.4)}
+            accessibilityRole="button"
+            accessibilityLabel="Zoom out"
+          >
+            <Text style={styles.zoomBtnText}>-</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -248,6 +282,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: Colors.borderSoft,
+  },
+  zoomControls: {
+    position: 'absolute',
+    right: Spacing.sm,
+    top: Spacing.sm,
+    gap: Spacing.xs,
+  },
+  zoomBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  zoomBtnText: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+    fontSize: 20,
+    lineHeight: 20,
   },
   etaTime: {
     fontSize: 22,

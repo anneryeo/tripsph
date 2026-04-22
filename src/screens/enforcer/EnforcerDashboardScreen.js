@@ -113,7 +113,9 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
   const enforcerId = route.params?.enforcerId ?? 'ENFORCER';
   const [reports] = useState(MOCK_REPORTS);
   const [view, setView] = useState('map');
+  const [mapRegion, setMapRegion] = useState(INITIAL_REGION);
   const zones = getOrdinanceZones();
+  const mapRef = React.useRef(null);
 
   const pendingCount = reports.filter((r) => r.status === 'pending').length;
   const aiCount = reports.filter((r) => r.aiVerified).length;
@@ -126,6 +128,17 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
   const orderedReports = [...reports].sort(
     (a, b) => b.aiVerified - a.aiVerified || new Date(b.timestamp) - new Date(a.timestamp),
   );
+
+  const zoomMap = (factor) => {
+    if (!mapRef.current || !mapRegion) return;
+    const nextRegion = {
+      ...mapRegion,
+      latitudeDelta: Math.min(2, Math.max(0.002, mapRegion.latitudeDelta * factor)),
+      longitudeDelta: Math.min(2, Math.max(0.002, mapRegion.longitudeDelta * factor)),
+    };
+    mapRef.current.animateToRegion(nextRegion, 180);
+    setMapRegion(nextRegion);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -169,7 +182,13 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
 
       {view === 'map' && (
         <View style={styles.mapContainer}>
-          <MapView style={styles.map} initialRegion={INITIAL_REGION} customMapStyle={darkMapStyle}>
+          <MapView
+            ref={mapRef}
+            style={styles.map}
+            initialRegion={INITIAL_REGION}
+            customMapStyle={darkMapStyle}
+            onRegionChangeComplete={setMapRegion}
+          >
             {zones.map((zone) => (
               <Circle
                 key={zone.id}
@@ -211,6 +230,25 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
               </View>
               <Text style={styles.legendText}>Manual Review</Text>
             </View>
+          </View>
+
+          <View style={styles.zoomControls}>
+            <TouchableOpacity
+              style={styles.zoomBtn}
+              onPress={() => zoomMap(0.7)}
+              accessibilityRole="button"
+              accessibilityLabel="Zoom in"
+            >
+              <Text style={styles.zoomBtnText}>+</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.zoomBtn}
+              onPress={() => zoomMap(1.4)}
+              accessibilityRole="button"
+              accessibilityLabel="Zoom out"
+            >
+              <Text style={styles.zoomBtnText}>-</Text>
+            </TouchableOpacity>
           </View>
         </View>
       )}
@@ -315,6 +353,28 @@ const styles = StyleSheet.create({
     padding: Spacing.sm,
     borderWidth: 1,
     borderColor: Colors.borderSoft,
+  },
+  zoomControls: {
+    position: 'absolute',
+    right: Spacing.sm,
+    bottom: Spacing.md,
+    gap: Spacing.xs,
+  },
+  zoomBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  zoomBtnText: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+    fontSize: 20,
+    lineHeight: 20,
   },
   legendRow: {
     flexDirection: 'row',
