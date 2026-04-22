@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
+  Image,
   TextInput,
   StyleSheet,
   TouchableOpacity,
@@ -19,8 +20,9 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Spacing, Radius, Gradients } from '../../constants/theme';
 
 // Demo credentials
 const DEMO_BADGE = 'MMDA-2026';
@@ -54,6 +56,12 @@ export default function EnforcerLoginScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <LinearGradient
+        colors={Gradients.heroSky}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradientBg}
+      >
       <KeyboardAvoidingView
         style={styles.inner}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -65,6 +73,11 @@ export default function EnforcerLoginScreen({ navigation }) {
 
         {/* ── Shield icon ── */}
         <View style={styles.iconWrap}>
+          <Image
+            source={require('../../../assets/TRIPSPH-logo-white.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
           <View style={styles.shieldIcon}>
             <Text style={styles.shieldLabel}>E</Text>
           </View>
@@ -119,6 +132,7 @@ export default function EnforcerLoginScreen({ navigation }) {
           Demo: Badge MMDA-2026 · PIN 1234
         </Text>
       </KeyboardAvoidingView>
+        </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -126,7 +140,10 @@ export default function EnforcerLoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundTint,
+    backgroundColor: Colors.darkAzure,
+  },
+  gradientBg: {
+    flex: 1,
   },
   inner: {
     flex: 1,
@@ -144,6 +161,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: Spacing.xl,
     marginBottom: Spacing.xl,
+  },
+  logoImage: {
+    width: 116,
+    height: 26,
+    marginBottom: Spacing.sm,
   },
   shieldIcon: {
     width: 74,
@@ -172,14 +194,14 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   form: {
-    backgroundColor: Colors.whiteTranslucent,
+    backgroundColor: 'rgba(255,255,255,0.78)',
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: 'rgba(255,255,255,0.6)',
     shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },

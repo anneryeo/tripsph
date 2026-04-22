@@ -2,7 +2,7 @@
   <img src="TRIPSPH-HEADER1.png" alt="Header" />
 </p>
 
-# TRIPS PH
+![Brand Logo](assets/TRIPSPH-logo-white.png)
 **Traffic Routing & Intelligent Parking System**
 > Submission for the **MMITS Bagong Gawi, Bagong Galaw Challenge 2026** hosted by the MMDA and the Japan International Cooperation Agency (JICA).
 
@@ -10,14 +10,14 @@
 
 ## Overview
 
-TRIPS PH is a comprehensive, dual-focus mobile application designed to solve Metro Manila's illegal parking and congestion problem. It provides:
+This platform is a comprehensive, dual-focus mobile application designed to solve Metro Manila's illegal parking and congestion problem. It provides:
 
 - **Real-time parking intelligence** to motorists via the *Ordinance Intelligence Engine (OIE)*
 - **Integrated, data-driven enforcement tools** for MMDA Enforcers / Planners
 
 Its core function is to facilitate **Bagong Gawi** (New Habits) by making legal parking easy to find and legal compliance the simplest choice.
 
-**TRIPS PH** is under the team **Cardinal Forge**, affiliated with Mapua University, where:
+This project is under the team **Cardinal Forge**, affiliated with Mapua University, where:
 - **Christine Julliane Laure Reyes** - Lead Developer, Core Systems Application and Complex AI Integration (OIE)
 - **Shania Keith Dela Vega** - Project Manager, MMDA and External API Integration + Architecture
 - **Louella Josephine Ng** - Business Analyst, Live Map Visualization and Risk Layer Designer
@@ -209,5 +209,5 @@ tripsph/
 
 ---
 
-*TRIPS PH · MMDA · JICA · Bagong Gawi, Bagong Galaw 2026*
+*MMDA · JICA · Bagong Gawi, Bagong Galaw 2026*
 

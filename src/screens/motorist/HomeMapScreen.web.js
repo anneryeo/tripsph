@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TouchableOpacity,
   StatusBar,
@@ -63,8 +64,8 @@ export default function HomeMapScreen({ navigation }) {
         <TouchableOpacity onPress={handleReturn} style={styles.returnBtn} accessibilityRole="button" accessibilityLabel="Return">
           <Text style={styles.returnText}>Return</Text>
         </TouchableOpacity>
-        <View>
-          <Text style={styles.appTitle}>TRIPS PH</Text>
+        <View style={styles.brandBlock}>
+          <Image source={require('../../../assets/TRIPSPH-logo-white.png')} style={styles.logoImage} resizeMode="contain" />
           <Text style={styles.appSubtitle}>Live Risk Map (Web Prototype)</Text>
         </View>
         <View style={styles.topRight}>
@@ -151,10 +152,14 @@ const styles = StyleSheet.create({
     color: Colors.azure,
   },
   appTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: Colors.textPrimary,
-    letterSpacing: 2,
+    display: 'none',
+  },
+  brandBlock: {
+    justifyContent: 'center',
+  },
+  logoImage: {
+    width: 112,
+    height: 24,
   },
   appSubtitle: {
     ...Typography.caption,

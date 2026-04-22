@@ -1,5 +1,5 @@
 /**
- * TRIPS PH – Design System Constants
+ * Design system constants
  * Color palette, typography, and layout tokens.
  */
 
@@ -8,37 +8,43 @@ import { Platform } from 'react-native';
 // ── Color Palette ──────────────────────────────────────────────────────────────
 export const Colors = {
   // Core background / surface
-  darkAzure: '#163b42',       // Background / Map Base
-  azure: '#1f525c',           // Primary Accent / Buttons / Nav Bar
-  azureLight: '#2c6e7a',      // Secondary gradient stop
-  backgroundTint: '#f4faf8',  // Light app background
+  darkAzure: '#0f3444',       // Background / Deep Brand Base
+  azure: '#0c7fa6',           // Primary Accent / Buttons / Nav Bar
+  azureLight: '#3ab3d9',      // Secondary gradient stop
+  backgroundTint: '#f2fbff',  // Light app background
   surfaceBase: '#ffffff',     // Card / panel base
-  surfaceMuted: '#eaf3f1',    // Secondary card fill
-  borderSoft: '#d2e4e0',      // Soft border on light surfaces
-  textPrimary: '#123239',     // Main readable text on light surfaces
-  textSecondary: '#45656b',   // Supporting text on light surfaces
+  surfaceMuted: '#e4f4fb',    // Secondary card fill
+  borderSoft: '#c4deea',      // Soft border on light surfaces
+  textPrimary: '#0f2e3a',     // Main readable text on light surfaces
+  textSecondary: '#3f6170',   // Supporting text on light surfaces
 
   // Status colors
-  grayGreen: '#63b289',       // Safety / Availability
+  grayGreen: '#31b87b',       // Safety / Availability
   alarmRed: '#e53e3e',        // High-risk / Violations
-  orange: '#ed8936',          // Medium-risk warning
+  orange: '#f28a2f',          // Medium-risk warning
 
   // Neutrals
   white: '#ffffff',
   gray: '#9e9e9e',            // Unverified / Low-confidence pins
   grayDark: '#4a4a4a',
-  overlayDark: 'rgba(22,59,66,0.85)',
-  overlayLight: 'rgba(255,255,255,0.82)',
+  overlayDark: 'rgba(9,39,52,0.84)',
+  overlayLight: 'rgba(255,255,255,0.78)',
 
   // Transparency helpers
-  alarmRedTranslucent: 'rgba(229,62,62,0.35)',
-  orangeTranslucent: 'rgba(237,137,54,0.35)',
-  grayGreenTranslucent: 'rgba(99,178,137,0.25)',
-  azureTranslucent: 'rgba(31,82,92,0.75)',
+  alarmRedTranslucent: 'rgba(229,62,62,0.32)',
+  orangeTranslucent: 'rgba(242,138,47,0.3)',
+  grayGreenTranslucent: 'rgba(49,184,123,0.26)',
+  azureTranslucent: 'rgba(12,127,166,0.72)',
   whiteTranslucent: 'rgba(255,255,255,0.72)',
-  focusRing: 'rgba(31,82,92,0.4)',
-  glowAzure: 'rgba(31,82,92,0.2)',
-  glowGreen: 'rgba(99,178,137,0.26)',
+  focusRing: 'rgba(12,127,166,0.4)',
+  glowAzure: 'rgba(12,127,166,0.24)',
+  glowGreen: 'rgba(49,184,123,0.28)',
+};
+
+export const Gradients = {
+  brand: ['#0b6f93', '#2a98c2', '#65c4e4'],
+  coolGlass: ['rgba(255,255,255,0.92)', 'rgba(239,250,255,0.72)'],
+  heroSky: ['#e6f6fd', '#f5fbff'],
 };
 
 // ── Typography ─────────────────────────────────────────────────────────────────

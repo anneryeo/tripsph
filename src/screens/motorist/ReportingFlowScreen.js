@@ -60,7 +60,7 @@ export default function ReportingFlowScreen({ navigation }) {
           </View>
           <Text style={styles.permTitle}>Camera Access Required</Text>
           <Text style={styles.permDesc}>
-            TRIPS PH needs camera access to capture violation photos for AI verification.
+            Camera access is needed to capture violation photos for AI verification.
           </Text>
           <TouchableOpacity
             style={styles.permBtn}

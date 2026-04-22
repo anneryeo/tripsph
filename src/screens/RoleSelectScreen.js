@@ -15,12 +15,21 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, Typography, Spacing, Radius } from '../constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Colors, Typography, Spacing, Radius, Gradients } from '../constants/theme';
 
 export default function RoleSelectScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <LinearGradient
+        colors={Gradients.heroSky}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradientBg}
+      >
+      <View style={styles.bgOrbA} />
+      <View style={styles.bgOrbB} />
 
       {/* ── Logo / Brand ── */}
       <View style={styles.brand}>
@@ -93,6 +102,7 @@ export default function RoleSelectScreen({ navigation }) {
         </Text>
         <Text style={styles.footerText}>MMDA · JICA</Text>
       </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -100,8 +110,30 @@ export default function RoleSelectScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.backgroundTint,
+    backgroundColor: Colors.darkAzure,
+  },
+  gradientBg: {
+    flex: 1,
     paddingHorizontal: Spacing.lg,
+    position: 'relative',
+  },
+  bgOrbA: {
+    position: 'absolute',
+    width: 220,
+    height: 220,
+    borderRadius: 999,
+    top: -70,
+    left: -40,
+    backgroundColor: 'rgba(12,127,166,0.2)',
+  },
+  bgOrbB: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: 999,
+    bottom: 80,
+    right: -80,
+    backgroundColor: 'rgba(49,184,123,0.14)',
   },
   brand: {
     alignItems: 'center',
@@ -118,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.azureLight,
+    borderColor: 'rgba(255,255,255,0.45)',
     shadowColor: Colors.darkAzure,
     shadowOpacity: 0.14,
     shadowRadius: 18,
@@ -156,15 +188,15 @@ const styles = StyleSheet.create({
   roleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.whiteTranslucent,
+    backgroundColor: 'rgba(255,255,255,0.78)',
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: 'rgba(255,255,255,0.55)',
     shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },

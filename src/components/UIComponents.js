@@ -1,5 +1,5 @@
 /**
- * Reusable UI components for TRIPS PH.
+ * Reusable UI components for the app.
  */
 
 import React from 'react';
@@ -116,12 +116,14 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.18,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.22,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
     elevation: 3,
   },
   primaryBtnText: {
@@ -138,8 +140,8 @@ const styles = StyleSheet.create({
   },
   ghostBtn: {
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
-    backgroundColor: Colors.surfaceBase,
+    borderColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: Colors.whiteTranslucent,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     borderRadius: Radius.md,
@@ -165,15 +167,15 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   card: {
-    backgroundColor: Colors.whiteTranslucent,
+    backgroundColor: 'rgba(255,255,255,0.76)',
     borderRadius: Radius.md,
     padding: Spacing.md,
     marginVertical: Spacing.xs,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: 'rgba(255,255,255,0.65)',
     shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.08,
-    shadowRadius: 18,
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
     shadowOffset: { width: 0, height: 8 },
     elevation: 3,
   },

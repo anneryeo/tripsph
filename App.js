@@ -1,5 +1,5 @@
 /**
- * TRIPS PH – Traffic Routing & Intelligent Parking System
+ * Traffic Routing & Intelligent Parking System
  *
  * Submission for MMITS Bagong Gawi, Bagong Galaw Challenge 2026
  * Hosted by MMDA and JICA
@@ -15,10 +15,11 @@ import React from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import AppNavigator from './src/navigation/AppNavigator';
-import { Colors } from './src/constants/theme';
+import { Colors, Gradients } from './src/constants/theme';
 
 if (Platform.OS === 'web') {
   Text.defaultProps = Text.defaultProps || {};
@@ -33,7 +34,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={styles.root}>
+      <LinearGradient colors={Gradients.heroSky} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.root}>
         <View style={[styles.appFrame, isWeb && styles.webFrame]}>
           <NavigationContainer
             theme={{
@@ -54,7 +55,7 @@ export default function App() {
             </SafeAreaView>
           </NavigationContainer>
         </View>
-      </View>
+      </LinearGradient>
     </SafeAreaProvider>
   );
 }
@@ -62,7 +63,6 @@ export default function App() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
   },
   appFrame: {
     flex: 1,

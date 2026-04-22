@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TouchableOpacity,
   StatusBar,
@@ -117,8 +118,8 @@ export default function HomeMapScreen({ navigation }) {
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
-        <View>
-          <Text style={styles.appTitle}>TRIPS PH</Text>
+        <View style={styles.brandBlock}>
+          <Image source={require('../../../assets/TRIPSPH-logo-white.png')} style={styles.logoImage} resizeMode="contain" />
           <Text style={styles.appSubtitle}>Live Risk Map</Text>
         </View>
         <View style={styles.topRight}>
@@ -266,10 +267,14 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.borderSoft,
   },
   appTitle: {
-    fontSize: 22,
-    fontWeight: '900',
-    color: Colors.textPrimary,
-    letterSpacing: 2,
+    display: 'none',
+  },
+  brandBlock: {
+    justifyContent: 'center',
+  },
+  logoImage: {
+    width: 112,
+    height: 24,
   },
   appSubtitle: {
     ...Typography.caption,
