@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="TRIPSPH-HEADER1.png" alt="Header" />
-</p>
-
 ![Brand Logo](assets/TRIPSPH-logo-white.png)
 **Traffic Routing & Intelligent Parking System**
 > Submission for the **MMITS Bagong Gawi, Bagong Galaw Challenge 2026** hosted by the MMDA and the Japan International Cooperation Agency (JICA).
