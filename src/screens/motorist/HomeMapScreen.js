@@ -119,7 +119,9 @@ export default function HomeMapScreen({ navigation }) {
 
       <View style={styles.topBar}>
         <View style={styles.brandBlock}>
-          <Image source={require('../../../assets/TRIPSPH-logo-white.png')} style={styles.logoImage} resizeMode="contain" />
+          <View style={styles.logoBadge}>
+            <Image source={require('../../../assets/TRIPSPH-logo-white.png')} style={styles.logoImage} resizeMode="contain" />
+          </View>
           <Text style={styles.appSubtitle}>Live Risk Map</Text>
         </View>
         <View style={styles.topRight}>
@@ -271,6 +273,18 @@ const styles = StyleSheet.create({
   },
   brandBlock: {
     justifyContent: 'center',
+  },
+  logoBadge: {
+    width: 128,
+    height: 34,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.azure,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.azureLight,
+    marginBottom: 2,
   },
   logoImage: {
     width: 112,

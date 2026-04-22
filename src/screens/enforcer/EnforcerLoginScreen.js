@@ -73,11 +73,13 @@ export default function EnforcerLoginScreen({ navigation }) {
 
         {/* ── Shield icon ── */}
         <View style={styles.iconWrap}>
-          <Image
-            source={require('../../../assets/TRIPSPH-logo-white.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
+          <View style={styles.logoBadge}>
+            <Image
+              source={require('../../../assets/TRIPSPH-logo-white.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+          </View>
           <View style={styles.shieldIcon}>
             <Text style={styles.shieldLabel}>E</Text>
           </View>
@@ -162,10 +164,26 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     marginBottom: Spacing.xl,
   },
-  logoImage: {
-    width: 116,
-    height: 26,
+  logoBadge: {
+    width: 228,
+    height: 72,
+    borderRadius: Radius.lg,
+    backgroundColor: Colors.azure,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.azureLight,
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  logoImage: {
+    width: '90%',
+    height: '74%',
   },
   shieldIcon: {
     width: 74,
