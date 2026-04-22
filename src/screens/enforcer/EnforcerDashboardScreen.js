@@ -2,14 +2,11 @@
  * Enforcer Dashboard Screen
  *
  * MMDA dedicated map view showing:
- * - AI-Verified reports → flashing Alarm Red pins
- * - Unverified reports  → Gray pins (Manual Review Queue)
- *
- * Reports are ordered by proximity to active enforcers.
- * Tapping a pin opens the ReportDetailScreen.
+ * - AI-Verified reports
+ * - Unverified reports in the manual review queue
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,7 +16,6 @@ import {
   SafeAreaView,
   StatusBar,
   Animated,
-  Dimensions,
 } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 
@@ -27,12 +23,10 @@ import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
 import { MOCK_REPORTS } from '../../services/MockReports';
 import { getOrdinanceZones } from '../../services/OIEService';
 
-const { width, height } = Dimensions.get('window');
-
 const INITIAL_REGION = {
-  latitude:      14.5765,
-  longitude:     121.0339,
-  latitudeDelta:  0.08,
+  latitude: 14.5765,
+  longitude: 121.0339,
+  latitudeDelta: 0.08,
   longitudeDelta: 0.08,
 };
 
@@ -46,7 +40,6 @@ const darkMapStyle = [
   { featureType: 'poi', stylers: [{ visibility: 'off' }] },
 ];
 
-// ── Flashing Pin component ────────────────────────────────────────────────────
 function ReportPin({ report, onPress }) {
   const flashAnim = React.useRef(new Animated.Value(1)).current;
 
@@ -72,19 +65,16 @@ function ReportPin({ report, onPress }) {
           report.aiVerified && { opacity: flashAnim },
         ]}
       >
-        <Text style={styles.pinText}>
-          {report.aiVerified ? '⚠' : '?'}
-        </Text>
+        <Text style={styles.pinText}>{report.aiVerified ? '!' : '?'}</Text>
       </Animated.View>
     </Marker>
   );
 }
 
-// ── Report list row ───────────────────────────────────────────────────────────
 function ReportRow({ report, onPress }) {
   const timeAgo = Math.floor((Date.now() - new Date(report.timestamp)) / 60000);
   return (
-    <TouchableOpacity style={styles.reportRow} onPress={onPress} activeOpacity={0.8}>
+    <TouchableOpacity style={styles.reportRow} onPress={onPress} activeOpacity={0.85}>
       <View
         style={[
           styles.rowIndicator,
@@ -98,7 +88,7 @@ function ReportRow({ report, onPress }) {
         </View>
         <Text style={styles.rowViolation}>{report.violationType}</Text>
         <Text style={styles.rowAddress} numberOfLines={1}>
-          📍 {report.address}
+          LOC {report.address}
         </Text>
       </View>
       <View style={styles.rowMeta}>
@@ -106,42 +96,41 @@ function ReportRow({ report, onPress }) {
           style={[
             styles.rowBadge,
             {
-              backgroundColor: report.aiVerified
-                ? Colors.alarmRed + '33'
-                : Colors.grayDark,
-              color: report.aiVerified ? Colors.alarmRed : Colors.gray,
+              backgroundColor: report.aiVerified ? Colors.alarmRed + '22' : Colors.surfaceMuted,
+              color: report.aiVerified ? Colors.alarmRed : Colors.textSecondary,
             },
           ]}
         >
-          {report.aiVerified ? 'AI ✓' : 'Manual'}
+          {report.aiVerified ? 'AI' : 'MANUAL'}
         </Text>
-        <Text style={styles.rowConf}>
-          {Math.round(report.confidence * 100)}%
-        </Text>
+        <Text style={styles.rowConf}>{Math.round(report.confidence * 100)}%</Text>
       </View>
     </TouchableOpacity>
   );
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
 export default function EnforcerDashboardScreen({ navigation, route }) {
   const enforcerId = route.params?.enforcerId ?? 'ENFORCER';
-  const [reports, setReports] = useState(MOCK_REPORTS);
-  const [view, setView] = useState('map'); // 'map' | 'list'
+  const [reports] = useState(MOCK_REPORTS);
+  const [view, setView] = useState('map');
   const zones = getOrdinanceZones();
+
+  const pendingCount = reports.filter((r) => r.status === 'pending').length;
+  const aiCount = reports.filter((r) => r.aiVerified).length;
+  const manualCount = Math.max(pendingCount - aiCount, 0);
 
   const openReport = (report) => {
     navigation.navigate('ReportDetail', { report, enforcerId });
   };
 
-  const pendingCount = reports.filter((r) => r.status === 'pending').length;
-  const aiCount      = reports.filter((r) => r.aiVerified).length;
+  const orderedReports = [...reports].sort(
+    (a, b) => b.aiVerified - a.aiVerified || new Date(b.timestamp) - new Date(a.timestamp),
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
-      {/* ── Top Bar ── */}
       <View style={styles.topBar}>
         <View>
           <Text style={styles.topTitle}>Enforcer Dashboard</Text>
@@ -153,43 +142,34 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
             <Text style={styles.statLabel}>AI Verified</Text>
           </View>
           <View style={styles.statBadge}>
-            <Text style={[styles.statNum, { color: Colors.gray }]}>
-              {pendingCount - aiCount}
-            </Text>
+            <Text style={[styles.statNum, { color: Colors.textSecondary }]}>{manualCount}</Text>
             <Text style={styles.statLabel}>Manual</Text>
           </View>
         </View>
       </View>
 
-      {/* ── View toggle ── */}
       <View style={styles.toggleRow}>
         <TouchableOpacity
           style={[styles.toggleBtn, view === 'map' && styles.toggleActive]}
           onPress={() => setView('map')}
+          accessibilityRole="button"
+          accessibilityLabel="Show map view"
         >
-          <Text style={[styles.toggleText, view === 'map' && styles.toggleTextActive]}>
-            🗺 Map
-          </Text>
+          <Text style={[styles.toggleText, view === 'map' && styles.toggleTextActive]}>MAP</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.toggleBtn, view === 'list' && styles.toggleActive]}
           onPress={() => setView('list')}
+          accessibilityRole="button"
+          accessibilityLabel="Show queue view"
         >
-          <Text style={[styles.toggleText, view === 'list' && styles.toggleTextActive]}>
-            📋 Queue
-          </Text>
+          <Text style={[styles.toggleText, view === 'list' && styles.toggleTextActive]}>QUEUE</Text>
         </TouchableOpacity>
       </View>
 
-      {/* ── Map View ── */}
       {view === 'map' && (
         <View style={styles.mapContainer}>
-          <MapView
-            style={styles.map}
-            initialRegion={INITIAL_REGION}
-            customMapStyle={darkMapStyle}
-          >
-            {/* Enforcement zones */}
+          <MapView style={styles.map} initialRegion={INITIAL_REGION} customMapStyle={darkMapStyle}>
             {zones.map((zone) => (
               <Circle
                 key={zone.id}
@@ -213,23 +193,17 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
               />
             ))}
 
-            {/* Report pins */}
             {reports.map((report) => (
-              <ReportPin
-                key={report.id}
-                report={report}
-                onPress={() => openReport(report)}
-              />
+              <ReportPin key={report.id} report={report} onPress={() => openReport(report)} />
             ))}
           </MapView>
 
-          {/* Legend */}
           <View style={styles.legend}>
             <View style={styles.legendRow}>
               <View style={[styles.legendPin, { backgroundColor: Colors.alarmRed }]}>
-                <Text style={styles.legendPinText}>⚠</Text>
+                <Text style={styles.legendPinText}>!</Text>
               </View>
-              <Text style={styles.legendText}>AI Verified (Flashing)</Text>
+              <Text style={styles.legendText}>AI Verified</Text>
             </View>
             <View style={styles.legendRow}>
               <View style={[styles.legendPin, { backgroundColor: Colors.gray }]}>
@@ -241,22 +215,14 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
         </View>
       )}
 
-      {/* ── List / Queue View ── */}
       {view === 'list' && (
         <FlatList
-          data={reports.sort((a, b) =>
-            b.aiVerified - a.aiVerified ||
-            new Date(b.timestamp) - new Date(a.timestamp)
-          )}
+          data={orderedReports}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ReportRow report={item} onPress={() => openReport(item)} />
-          )}
+          renderItem={({ item }) => <ReportRow report={item} onPress={() => openReport(item)} />}
           contentContainerStyle={{ paddingBottom: Spacing.xxl }}
           ListHeaderComponent={
-            <Text style={styles.queueHeader}>
-              Ordered by priority · {pendingCount} pending
-            </Text>
+            <Text style={styles.queueHeader}>Ordered by priority · {pendingCount} pending</Text>
           }
         />
       )}
@@ -267,7 +233,7 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
   },
   topBar: {
     flexDirection: 'row',
@@ -275,15 +241,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.overlayLight,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderSoft,
   },
   topTitle: {
     ...Typography.heading3,
     fontSize: 16,
+    color: Colors.textPrimary,
   },
   topSub: {
     ...Typography.caption,
-    color: Colors.grayGreen,
+    color: Colors.textSecondary,
   },
   statRow: {
     flexDirection: 'row',
@@ -291,10 +260,12 @@ const styles = StyleSheet.create({
   },
   statBadge: {
     alignItems: 'center',
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.surfaceBase,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: Radius.sm,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
   },
   statNum: {
     fontSize: 18,
@@ -302,13 +273,14 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     ...Typography.caption,
+    color: Colors.textSecondary,
     fontSize: 10,
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.surfaceBase,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.darkAzure,
+    borderBottomColor: Colors.borderSoft,
   },
   toggleBtn: {
     flex: 1,
@@ -317,14 +289,14 @@ const styles = StyleSheet.create({
   },
   toggleActive: {
     borderBottomWidth: 2,
-    borderBottomColor: Colors.grayGreen,
+    borderBottomColor: Colors.azure,
   },
   toggleText: {
     ...Typography.body,
-    color: Colors.gray,
+    color: Colors.textSecondary,
   },
   toggleTextActive: {
-    color: Colors.white,
+    color: Colors.azure,
     fontWeight: '700',
   },
   mapContainer: {
@@ -338,9 +310,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Spacing.sm,
     right: Spacing.sm,
-    backgroundColor: Colors.azureTranslucent,
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.md,
     padding: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
   },
   legendRow: {
     flexDirection: 'row',
@@ -358,9 +332,11 @@ const styles = StyleSheet.create({
   legendPinText: {
     fontSize: 12,
     color: Colors.white,
+    fontWeight: '800',
   },
   legendText: {
     ...Typography.caption,
+    color: Colors.textPrimary,
     fontSize: 11,
   },
   pin: {
@@ -381,21 +357,24 @@ const styles = StyleSheet.create({
   pinText: {
     fontSize: 16,
     color: Colors.white,
+    fontWeight: '800',
   },
   queueHeader: {
     ...Typography.caption,
     padding: Spacing.md,
     letterSpacing: 1,
     textTransform: 'uppercase',
-    color: Colors.gray,
+    color: Colors.textSecondary,
   },
   reportRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.white,
     borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
     overflow: 'hidden',
   },
   rowIndicator: {
@@ -414,20 +393,21 @@ const styles = StyleSheet.create({
   rowPlate: {
     ...Typography.bodyBold,
     fontSize: 15,
+    color: Colors.textPrimary,
     letterSpacing: 1,
   },
   rowTime: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.textSecondary,
   },
   rowViolation: {
     ...Typography.body,
-    color: Colors.grayGreen,
+    color: Colors.azure,
     marginBottom: 2,
   },
   rowAddress: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.textSecondary,
   },
   rowMeta: {
     padding: Spacing.sm,
@@ -444,6 +424,7 @@ const styles = StyleSheet.create({
   },
   rowConf: {
     ...Typography.caption,
+    color: Colors.textPrimary,
     fontWeight: '700',
   },
 });

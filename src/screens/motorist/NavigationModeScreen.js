@@ -117,12 +117,12 @@ export default function NavigationModeScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
       {/* ── Top Nav Bar ── */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Text style={styles.backText}>{'< Back'}</Text>
         </TouchableOpacity>
         <View style={styles.topCenter}>
           <Text style={styles.navTitle}>Navigation Mode</Text>
@@ -154,7 +154,7 @@ export default function NavigationModeScreen({ navigation, route }) {
           {/* Destination marker */}
           <Marker coordinate={DESTINATION}>
             <View style={styles.destMarker}>
-              <Text style={styles.destMarkerText}>🏁</Text>
+              <Text style={styles.destMarkerText}>D</Text>
             </View>
           </Marker>
         </MapView>
@@ -175,7 +175,9 @@ export default function NavigationModeScreen({ navigation, route }) {
         ]}
       >
         <View style={styles.bannerContent}>
-          <Text style={styles.bannerIcon}>{isHighRisk ? '⚠' : '✓'}</Text>
+          <View style={[styles.bannerIcon, isHighRisk ? styles.bannerIconRisk : styles.bannerIconSafe]}>
+            <Text style={styles.bannerIconText}>{isHighRisk ? '!' : 'OK'}</Text>
+          </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.bannerText}>{bannerText}</Text>
             {verdict?.zone && (
@@ -197,21 +199,23 @@ export default function NavigationModeScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
   },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.overlayLight,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderSoft,
   },
   backBtn: {
     width: 60,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.grayGreen,
+    color: Colors.azure,
   },
   topCenter: {
     flex: 1,
@@ -220,10 +224,11 @@ const styles = StyleSheet.create({
   navTitle: {
     ...Typography.bodyBold,
     fontSize: 15,
+    color: Colors.textPrimary,
   },
   destLabel: {
     ...Typography.caption,
-    color: Colors.grayGreen,
+    color: Colors.textSecondary,
   },
   mapContainer: {
     flex: 1,
@@ -236,28 +241,38 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Spacing.sm,
     left: Spacing.sm,
-    backgroundColor: Colors.azureTranslucent,
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
   },
   etaTime: {
     fontSize: 22,
     fontWeight: '800',
-    color: Colors.white,
+    color: Colors.textPrimary,
   },
   etaDist: {
     ...Typography.caption,
-    color: Colors.grayGreen,
+    color: Colors.textSecondary,
   },
   destMarker: {
     width: 36,
     height: 36,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.azure,
   },
-  destMarkerText: { fontSize: 28 },
+  destMarkerText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.azure,
+  },
   riskBanner: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
@@ -269,8 +284,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bannerIcon: {
-    fontSize: 28,
+    width: 36,
+    height: 36,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: Spacing.sm,
+  },
+  bannerIconRisk: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+  },
+  bannerIconSafe: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+  },
+  bannerIconText: {
+    color: Colors.white,
+    fontWeight: '800',
+    fontSize: 12,
   },
   bannerText: {
     ...Typography.bodyBold,

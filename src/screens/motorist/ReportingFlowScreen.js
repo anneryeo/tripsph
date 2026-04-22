@@ -1,14 +1,8 @@
 /**
- * Reporting Flow Screen
- *
- * Step 1 – Camera Capture
- *
- * The user taps the Camera icon to open this screen.
- * On capture, GPS coordinates and UTC timestamp are recorded atomically.
- * The photo is then passed to the AI pipeline screen.
+ * Reporting Flow Screen - Camera Capture
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -24,7 +18,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 
 import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function ReportingFlowScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
@@ -32,12 +26,11 @@ export default function ReportingFlowScreen({ navigation }) {
   const [flash, setFlash] = useState('off');
   const cameraRef = useRef(null);
 
-  // ── Permission check ──────────────────────────────────────────────────────
   if (!permission) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centeredMsg}>
-          <Text style={Typography.body}>Checking camera permissions…</Text>
+          <Text style={styles.centerMsgText}>Checking camera permissions...</Text>
         </View>
       </SafeAreaView>
     );
@@ -45,16 +38,22 @@ export default function ReportingFlowScreen({ navigation }) {
 
   if (!permission.granted) {
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
-        <View style={styles.centeredMsg}>
-          <Text style={styles.icon}>📷</Text>
+      <SafeAreaView style={styles.permissionContainer}>
+        <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+        <View style={styles.permissionCard}>
+          <View style={styles.permissionIcon}>
+            <Text style={styles.permissionIconText}>CAM</Text>
+          </View>
           <Text style={styles.permTitle}>Camera Access Required</Text>
           <Text style={styles.permDesc}>
-            TRIPS PH needs camera access to capture parking violation photos
-            for AI-verified reporting to MMDA.
+            TRIPS PH needs camera access to capture violation photos for AI verification.
           </Text>
-          <TouchableOpacity style={styles.permBtn} onPress={requestPermission}>
+          <TouchableOpacity
+            style={styles.permBtn}
+            onPress={requestPermission}
+            accessibilityRole="button"
+            accessibilityLabel="Grant camera permission"
+          >
             <Text style={styles.permBtnText}>Grant Camera Access</Text>
           </TouchableOpacity>
         </View>
@@ -62,21 +61,16 @@ export default function ReportingFlowScreen({ navigation }) {
     );
   }
 
-  // ── Capture handler ───────────────────────────────────────────────────────
   const handleCapture = async () => {
     if (!cameraRef.current || capturing) return;
     setCapturing(true);
 
     try {
-      // Record GPS and UTC timestamp atomically with the photo
       const timestamp = Date.now();
-
-      // Demo: fixed GPS coordinates in Ortigas Center area.
-      // Production: replace with expo-location getCurrentPositionAsync().
       const gpsCoords = {
-        latitude:  14.5876,
+        latitude: 14.5876,
         longitude: 121.0607,
-        accuracy:  5,
+        accuracy: 5,
       };
 
       const photo = await cameraRef.current.takePictureAsync({
@@ -86,14 +80,13 @@ export default function ReportingFlowScreen({ navigation }) {
         skipProcessing: Platform.OS === 'android',
       });
 
-      // Navigate to AI confirmation screen
       navigation.navigate('ReportConfirm', {
-        imageUri:  photo.uri,
+        imageUri: photo.uri,
         timestamp,
-        latitude:  gpsCoords.latitude,
+        latitude: gpsCoords.latitude,
         longitude: gpsCoords.longitude,
       });
-    } catch (err) {
+    } catch {
       Alert.alert('Capture Failed', 'Please try again.');
     } finally {
       setCapturing(false);
@@ -104,23 +97,21 @@ export default function ReportingFlowScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-      {/* ── Camera Viewfinder ── */}
-      <CameraView
-        ref={cameraRef}
-        style={styles.camera}
-        facing="back"
-        flash={flash}
-      >
-        {/* Overlay: Corner guides */}
+      <CameraView ref={cameraRef} style={styles.camera} facing="back" flash={flash}>
         <View style={styles.overlay}>
           <View style={styles.topOverlay}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backBtn}
+              accessibilityRole="button"
+              accessibilityLabel="Back"
+            >
+              <Text style={styles.backText}>{'< Back'}</Text>
+            </TouchableOpacity>
             <Text style={styles.headerTitle}>Capture Violation</Text>
-            <Text style={styles.headerSub}>
-              Point camera at the illegally parked vehicle
-            </Text>
+            <Text style={styles.headerSub}>Center the vehicle plate and violation area</Text>
           </View>
 
-          {/* Viewfinder frame */}
           <View style={styles.frameArea}>
             <View style={[styles.corner, styles.cornerTL]} />
             <View style={[styles.corner, styles.cornerTR]} />
@@ -128,41 +119,34 @@ export default function ReportingFlowScreen({ navigation }) {
             <View style={[styles.corner, styles.cornerBR]} />
           </View>
 
-          {/* Controls */}
           <View style={styles.controls}>
-            {/* Flash toggle */}
             <TouchableOpacity
               style={styles.controlBtn}
               onPress={() => setFlash(flash === 'off' ? 'on' : 'off')}
+              accessibilityRole="button"
+              accessibilityLabel="Toggle flash"
             >
-              <Text style={styles.controlIcon}>
-                {flash === 'off' ? '⚡' : '☀'}
-              </Text>
+              <Text style={styles.controlLabel}>{flash === 'off' ? 'FLASH OFF' : 'FLASH ON'}</Text>
             </TouchableOpacity>
 
-            {/* Shutter */}
             <TouchableOpacity
               style={[styles.shutterOuter, capturing && styles.shutterCapturing]}
               onPress={handleCapture}
               disabled={capturing}
+              accessibilityRole="button"
+              accessibilityLabel="Take photo"
             >
               <View style={styles.shutterInner} />
             </TouchableOpacity>
 
-            {/* Spacer */}
             <View style={styles.controlBtn} />
           </View>
         </View>
       </CameraView>
 
-      {/* ── Info bar ── */}
       <View style={styles.infoBar}>
-        <Text style={styles.infoText}>
-          📍 GPS · ⏱ UTC Timestamp captured automatically
-        </Text>
-        <Text style={styles.infoSub}>
-          {'On-device AI will scan for violations in <500ms'}
-        </Text>
+        <Text style={styles.infoText}>GPS and UTC timestamp captured automatically</Text>
+        <Text style={styles.infoSub}>On-device AI scan target: under 500ms</Text>
       </View>
     </SafeAreaView>
   );
@@ -171,7 +155,42 @@ export default function ReportingFlowScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#000000',
+  },
+  permissionContainer: {
+    flex: 1,
+    backgroundColor: Colors.backgroundTint,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.lg,
+  },
+  permissionCard: {
+    width: '100%',
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    borderRadius: Radius.lg,
+    padding: Spacing.xl,
+    alignItems: 'center',
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.12,
+    shadowRadius: 22,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  permissionIcon: {
+    width: 72,
+    height: 72,
+    borderRadius: Radius.lg,
+    backgroundColor: Colors.glowAzure,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.md,
+  },
+  permissionIconText: {
+    fontWeight: '800',
+    color: Colors.azure,
+    letterSpacing: 1,
   },
   centeredMsg: {
     flex: 1,
@@ -180,16 +199,20 @@ const styles = StyleSheet.create({
     padding: Spacing.xl,
     backgroundColor: Colors.darkAzure,
   },
-  icon: { fontSize: 64, marginBottom: Spacing.md },
+  centerMsgText: {
+    ...Typography.body,
+    color: Colors.white,
+  },
   permTitle: {
     ...Typography.heading2,
+    color: Colors.textPrimary,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
   permDesc: {
     ...Typography.body,
+    color: Colors.textSecondary,
     textAlign: 'center',
-    color: Colors.gray,
     marginBottom: Spacing.xl,
   },
   permBtn: {
@@ -200,6 +223,7 @@ const styles = StyleSheet.create({
   },
   permBtnText: {
     ...Typography.bodyBold,
+    color: Colors.white,
     fontSize: 16,
   },
   camera: {
@@ -210,13 +234,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   topOverlay: {
-    alignItems: 'center',
-    paddingTop: Spacing.xxl,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    paddingTop: Spacing.xl,
     paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+  },
+  backBtn: {
+    alignSelf: 'flex-start',
+  },
+  backText: {
+    ...Typography.bodyBold,
+    color: Colors.white,
   },
   headerTitle: {
     ...Typography.heading2,
+    color: Colors.white,
+    marginTop: Spacing.sm,
   },
   headerSub: {
     ...Typography.caption,
@@ -225,8 +259,8 @@ const styles = StyleSheet.create({
   },
   frameArea: {
     alignSelf: 'center',
-    width: width * 0.75,
-    height: width * 0.55,
+    width: width * 0.78,
+    height: width * 0.56,
     position: 'relative',
   },
   corner: {
@@ -246,20 +280,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: Spacing.xxl,
     paddingHorizontal: Spacing.xl,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     paddingTop: Spacing.lg,
+    backgroundColor: 'rgba(0,0,0,0.35)',
   },
   controlBtn: {
-    width: 52,
+    width: 72,
     height: 52,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  controlIcon: { fontSize: 28 },
+  controlLabel: {
+    ...Typography.caption,
+    color: Colors.white,
+    textAlign: 'center',
+  },
   shutterOuter: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 74,
+    height: 74,
+    borderRadius: 37,
     borderWidth: 4,
     borderColor: Colors.white,
     alignItems: 'center',
@@ -276,18 +314,20 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   infoBar: {
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.overlayLight,
+    borderTopWidth: 1,
+    borderTopColor: Colors.borderSoft,
     alignItems: 'center',
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.md,
   },
   infoText: {
     ...Typography.caption,
-    color: Colors.white,
+    color: Colors.textPrimary,
   },
   infoSub: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.textSecondary,
     marginTop: 2,
     fontSize: 11,
   },

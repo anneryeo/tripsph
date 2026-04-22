@@ -13,19 +13,19 @@ import {
   StyleSheet,
   StatusBar,
   SafeAreaView,
-  Image,
 } from 'react-native';
 import { Colors, Typography, Spacing, Radius } from '../constants/theme';
 
 export default function RoleSelectScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
       {/* ── Logo / Brand ── */}
       <View style={styles.brand}>
-        <View style={styles.logoCircle}>
-          <Text style={styles.logoText}>🚗</Text>
+        <View style={styles.logoBadge}>
+          <View style={styles.logoDot} />
+          <Text style={styles.logoText}>TRIPS</Text>
         </View>
         <Text style={styles.appName}>TRIPS PH</Text>
         <Text style={styles.tagline}>
@@ -45,8 +45,12 @@ export default function RoleSelectScreen({ navigation }) {
           style={styles.roleCard}
           onPress={() => navigation.navigate('MotoristApp')}
           activeOpacity={0.85}
+          accessibilityRole="button"
+          accessibilityLabel="Continue as Motorist"
         >
-          <Text style={styles.roleIcon}>🚘</Text>
+          <View style={[styles.roleIconWrap, styles.motoristIcon]}>
+            <Text style={styles.roleIconLabel}>M</Text>
+          </View>
           <View style={styles.roleInfo}>
             <Text style={styles.roleTitle}>Motorist</Text>
             <Text style={styles.roleDesc}>
@@ -54,7 +58,7 @@ export default function RoleSelectScreen({ navigation }) {
               Report violations with AI verification
             </Text>
           </View>
-          <Text style={styles.roleArrow}>›</Text>
+          <Text style={styles.roleArrow}>></Text>
         </TouchableOpacity>
 
         {/* Enforcer Button */}
@@ -62,8 +66,12 @@ export default function RoleSelectScreen({ navigation }) {
           style={[styles.roleCard, styles.enforcerCard]}
           onPress={() => navigation.navigate('EnforcerLogin')}
           activeOpacity={0.85}
+          accessibilityRole="button"
+          accessibilityLabel="Continue as MMDA Enforcer"
         >
-          <Text style={styles.roleIcon}>🛡</Text>
+          <View style={[styles.roleIconWrap, styles.enforcerIcon]}>
+            <Text style={styles.roleIconLabel}>E</Text>
+          </View>
           <View style={styles.roleInfo}>
             <Text style={styles.roleTitle}>MMDA Enforcer</Text>
             <Text style={styles.roleDesc}>
@@ -71,7 +79,7 @@ export default function RoleSelectScreen({ navigation }) {
               NCAP dispatch & ticketing
             </Text>
           </View>
-          <Text style={styles.roleArrow}>›</Text>
+          <Text style={styles.roleArrow}>></Text>
         </TouchableOpacity>
       </View>
 
@@ -89,7 +97,7 @@ export default function RoleSelectScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
     paddingHorizontal: Spacing.lg,
   },
   brand: {
@@ -97,35 +105,53 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xxl,
     marginBottom: Spacing.xl,
   },
-  logoCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: Colors.azure,
+  logoBadge: {
+    minWidth: 132,
+    height: 54,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.surfaceBase,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.md,
     marginBottom: Spacing.md,
-    borderWidth: 3,
-    borderColor: Colors.grayGreen,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.1,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
   },
-  logoText: { fontSize: 42 },
+  logoDot: {
+    width: 10,
+    height: 10,
+    borderRadius: Radius.full,
+    marginRight: 10,
+    backgroundColor: Colors.grayGreen,
+  },
+  logoText: {
+    color: Colors.azure,
+    fontWeight: '800',
+    letterSpacing: 2,
+  },
   appName: {
     fontSize: 36,
     fontWeight: '900',
-    color: Colors.white,
-    letterSpacing: 4,
+    color: Colors.textPrimary,
+    letterSpacing: 2,
   },
   tagline: {
-    ...Typography.body,
-    color: Colors.grayGreen,
+    ...Typography.bodyBold,
+    color: Colors.textSecondary,
     textAlign: 'center',
     marginTop: Spacing.xs,
   },
   subtitle: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.azure,
     marginTop: 4,
-    letterSpacing: 2,
+    letterSpacing: 1,
   },
   roleSection: {
     flex: 1,
@@ -137,38 +163,61 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     letterSpacing: 1,
     textTransform: 'uppercase',
+    color: Colors.textSecondary,
   },
   roleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: Colors.grayGreen + '44',
+    borderColor: Colors.borderSoft,
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
   },
   enforcerCard: {
-    borderColor: Colors.orange + '66',
+    borderColor: Colors.orange + '55',
   },
-  roleIcon: {
-    fontSize: 36,
+  roleIconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: Spacing.md,
+  },
+  motoristIcon: {
+    backgroundColor: Colors.glowGreen,
+  },
+  enforcerIcon: {
+    backgroundColor: Colors.glowAzure,
+  },
+  roleIconLabel: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: Colors.textPrimary,
   },
   roleInfo: {
     flex: 1,
   },
   roleTitle: {
     ...Typography.heading3,
+    color: Colors.textPrimary,
     marginBottom: 4,
   },
   roleDesc: {
     ...Typography.caption,
+    color: Colors.textSecondary,
     lineHeight: 18,
   },
   roleArrow: {
     fontSize: 28,
-    color: Colors.grayGreen,
+    color: Colors.azure,
     fontWeight: '300',
   },
   footer: {
@@ -177,7 +226,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     ...Typography.caption,
-    color: Colors.grayDark,
+    color: Colors.textSecondary,
     marginBottom: 2,
   },
 });

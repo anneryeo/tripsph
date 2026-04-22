@@ -53,19 +53,21 @@ export default function EnforcerLoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
       <KeyboardAvoidingView
         style={styles.inner}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         {/* ── Back ── */}
         <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>‹ Back</Text>
+          <Text style={styles.backText}>{'< Back'}</Text>
         </TouchableOpacity>
 
         {/* ── Shield icon ── */}
         <View style={styles.iconWrap}>
-          <Text style={styles.shieldIcon}>🛡</Text>
+          <View style={styles.shieldIcon}>
+            <Text style={styles.shieldLabel}>E</Text>
+          </View>
           <Text style={styles.title}>Enforcer Access</Text>
           <Text style={styles.subtitle}>MMDA Authorized Personnel Only</Text>
         </View>
@@ -76,29 +78,33 @@ export default function EnforcerLoginScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="e.g. MMDA-2026"
-            placeholderTextColor={Colors.gray}
+            placeholderTextColor={Colors.textSecondary}
             value={badge}
             onChangeText={setBadge}
             autoCapitalize="characters"
             autoCorrect={false}
+            accessibilityLabel="MMDA Badge ID"
           />
 
           <Text style={[styles.label, { marginTop: Spacing.md }]}>PIN</Text>
           <TextInput
             style={styles.input}
             placeholder="4-digit PIN"
-            placeholderTextColor={Colors.gray}
+            placeholderTextColor={Colors.textSecondary}
             value={pin}
             onChangeText={setPin}
             keyboardType="number-pad"
             secureTextEntry
             maxLength={6}
+            accessibilityLabel="PIN"
           />
 
           <TouchableOpacity
             style={[styles.loginBtn, loading && { opacity: 0.7 }]}
             onPress={handleLogin}
             disabled={loading}
+            accessibilityRole="button"
+            accessibilityLabel="Authenticate as enforcer"
           >
             {loading ? (
               <ActivityIndicator color={Colors.white} />
@@ -120,7 +126,7 @@ export default function EnforcerLoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
   },
   inner: {
     flex: 1,
@@ -132,16 +138,32 @@ const styles = StyleSheet.create({
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.grayGreen,
+    color: Colors.azure,
   },
   iconWrap: {
     alignItems: 'center',
     marginTop: Spacing.xl,
     marginBottom: Spacing.xl,
   },
-  shieldIcon: { fontSize: 64, marginBottom: Spacing.md },
+  shieldIcon: {
+    width: 74,
+    height: 74,
+    borderRadius: Radius.lg,
+    backgroundColor: Colors.glowAzure,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.md,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+  },
+  shieldLabel: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: Colors.azure,
+  },
   title: {
     ...Typography.heading1,
+    color: Colors.textPrimary,
   },
   subtitle: {
     ...Typography.caption,
@@ -150,39 +172,53 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   form: {
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.lg,
     padding: Spacing.lg,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
   },
   label: {
     ...Typography.label,
+    color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
   input: {
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.surfaceBase,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    color: Colors.white,
+    color: Colors.textPrimary,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: Colors.grayDark,
+    borderColor: Colors.borderSoft,
   },
   loginBtn: {
     marginTop: Spacing.xl,
-    backgroundColor: Colors.grayGreen,
+    backgroundColor: Colors.azure,
     borderRadius: Radius.md,
     paddingVertical: Spacing.md,
     alignItems: 'center',
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 3,
   },
   loginBtnText: {
     ...Typography.bodyBold,
+    color: Colors.white,
     fontSize: 16,
   },
   demoHint: {
     ...Typography.caption,
     textAlign: 'center',
     marginTop: Spacing.lg,
-    color: Colors.grayDark,
+    color: Colors.textSecondary,
   },
 });

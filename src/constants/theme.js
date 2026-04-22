@@ -8,6 +8,13 @@ export const Colors = {
   // Core background / surface
   darkAzure: '#163b42',       // Background / Map Base
   azure: '#1f525c',           // Primary Accent / Buttons / Nav Bar
+  azureLight: '#2c6e7a',      // Secondary gradient stop
+  backgroundTint: '#f4faf8',  // Light app background
+  surfaceBase: '#ffffff',     // Card / panel base
+  surfaceMuted: '#eaf3f1',    // Secondary card fill
+  borderSoft: '#d2e4e0',      // Soft border on light surfaces
+  textPrimary: '#123239',     // Main readable text on light surfaces
+  textSecondary: '#45656b',   // Supporting text on light surfaces
 
   // Status colors
   grayGreen: '#63b289',       // Safety / Availability
@@ -19,12 +26,17 @@ export const Colors = {
   gray: '#9e9e9e',            // Unverified / Low-confidence pins
   grayDark: '#4a4a4a',
   overlayDark: 'rgba(22,59,66,0.85)',
+  overlayLight: 'rgba(255,255,255,0.82)',
 
   // Transparency helpers
   alarmRedTranslucent: 'rgba(229,62,62,0.35)',
   orangeTranslucent: 'rgba(237,137,54,0.35)',
   grayGreenTranslucent: 'rgba(99,178,137,0.25)',
   azureTranslucent: 'rgba(31,82,92,0.75)',
+  whiteTranslucent: 'rgba(255,255,255,0.72)',
+  focusRing: 'rgba(31,82,92,0.4)',
+  glowAzure: 'rgba(31,82,92,0.2)',
+  glowGreen: 'rgba(99,178,137,0.26)',
 };
 
 // ── Typography ─────────────────────────────────────────────────────────────────

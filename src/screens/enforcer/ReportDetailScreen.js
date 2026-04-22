@@ -1,14 +1,5 @@
 /**
- * Report Detail Screen
- *
- * Displays citizen photo evidence + AI score for a selected violation report.
- *
- * Action Panel:
- * - [Dispatch Towing]
- * - [Issue NCAP Violation] → POST to MMDA ticketing system
- * - [Mark as False Alarm]
- *
- * Enforcer Response Time target: ≤ 5 minutes
+ * Report Detail Screen - Enforcer Actions
  */
 
 import React, { useState, useEffect } from 'react';
@@ -33,12 +24,11 @@ const { width } = Dimensions.get('window');
 
 export default function ReportDetailScreen({ navigation, route }) {
   const { report, enforcerId } = route.params ?? {};
-  const [actionLoading, setActionLoading] = useState(null); // 'tow' | 'ncap' | 'false'
-  const [actionDone, setActionDone]       = useState(null);
-  const [elapsed, setElapsed]             = useState(0);
-  const [ncapTicket, setNcapTicket]       = useState(null);
+  const [actionLoading, setActionLoading] = useState(null);
+  const [actionDone, setActionDone] = useState(null);
+  const [elapsed, setElapsed] = useState(0);
+  const [ncapTicket, setNcapTicket] = useState(null);
 
-  // ── Enforcer response timer ───────────────────────────────────────────────
   useEffect(() => {
     const start = Date.now();
     const interval = setInterval(() => {
@@ -55,41 +45,35 @@ export default function ReportDetailScreen({ navigation, route }) {
   };
 
   const timeRemaining = Math.max(0, Targets.enforcerResponseTimeSec - elapsed);
-  const timerColor = timeRemaining < 60 ? Colors.alarmRed
-    : timeRemaining < 120 ? Colors.orange
-    : Colors.grayGreen;
+  const timerColor = timeRemaining < 60 ? Colors.alarmRed : timeRemaining < 120 ? Colors.orange : Colors.grayGreen;
 
-  // ── Action handlers ───────────────────────────────────────────────────────
   const handleDispatchTow = async () => {
     setActionLoading('tow');
     await new Promise((r) => setTimeout(r, 600));
     setActionLoading(null);
     setActionDone('tow');
-    Alert.alert(
-      'Towing Dispatched',
-      `Tow truck dispatched to:\n${report.address}\nPlate: ${report.plateNumber}`,
-    );
+    Alert.alert('Towing Dispatched', `Tow truck sent to:\n${report.address}\nPlate: ${report.plateNumber}`);
   };
 
   const handleNCAPViolation = async () => {
     setActionLoading('ncap');
     try {
       const result = await issueNCAPViolation({
-        plateNumber:   report.plateNumber,
+        plateNumber: report.plateNumber,
         violationType: report.violationType,
-        latitude:      report.latitude,
-        longitude:     report.longitude,
-        timestamp:     report.timestamp,
-        photoUrl:      report.photoUrl ?? 'https://storage.tripsph.mmda.gov.ph/' + report.id,
+        latitude: report.latitude,
+        longitude: report.longitude,
+        timestamp: report.timestamp,
+        photoUrl: report.photoUrl ?? `https://storage.tripsph.mmda.gov.ph/${report.id}`,
         enforcerId,
-        confidence:    report.confidence,
+        confidence: report.confidence,
       });
 
       setNcapTicket(result.ticketNumber);
       setActionDone('ncap');
       Alert.alert(
-        'NCAP Violation Issued ✓',
-        `Ticket: ${result.ticketNumber}\nPlate: ${report.plateNumber}\nResponse: ${result.enforcerResponseMs} ms\n\nAll data pre-filled – no manual re-entry required.`,
+        'NCAP Violation Issued',
+        `Ticket: ${result.ticketNumber}\nPlate: ${report.plateNumber}\nResponse: ${result.enforcerResponseMs} ms`,
       );
     } catch {
       Alert.alert('Error', 'Failed to issue NCAP violation. Check connection.');
@@ -101,7 +85,7 @@ export default function ReportDetailScreen({ navigation, route }) {
   const handleFalseAlarm = async () => {
     Alert.alert(
       'Mark as False Alarm?',
-      'This will remove the report from the queue and downgrade the AI model confidence for similar detections.',
+      'This removes the report from queue and marks this detection pattern as lower confidence.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -119,55 +103,41 @@ export default function ReportDetailScreen({ navigation, route }) {
     );
   };
 
-  const timeAgo = Math.floor(
-    (Date.now() - new Date(report?.timestamp ?? Date.now())) / 60000,
-  );
+  const timeAgo = Math.floor((Date.now() - new Date(report?.timestamp ?? Date.now())) / 60000);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
-      {/* ── Header ── */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>‹ Dashboard</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          accessibilityRole="button"
+          accessibilityLabel="Back to dashboard"
+        >
+          <Text style={styles.backText}>{'< Dashboard'}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Violation Report</Text>
-        {/* Response timer */}
         <View style={[styles.timerBadge, { borderColor: timerColor }]}>
-          <Text style={[styles.timerText, { color: timerColor }]}>
-            {formatElapsed(elapsed)}
-          </Text>
+          <Text style={[styles.timerText, { color: timerColor }]}>{formatElapsed(elapsed)}</Text>
         </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-
-        {/* ── Photo placeholder ── */}
         <View style={styles.photoCard}>
-          {report?.photoUrl ? (
-            // In production: <Image source={{ uri: report.photoUrl }} style={styles.photo} />
-            <View style={styles.photoPlaceholder}>
-              <Text style={styles.photoIcon}>📸</Text>
-              <Text style={styles.photoCaption}>Citizen Photo Evidence</Text>
-            </View>
-          ) : (
-            <View style={styles.photoPlaceholder}>
-              <Text style={styles.photoIcon}>📸</Text>
-              <Text style={styles.photoCaption}>Citizen Photo Evidence</Text>
-              <Text style={styles.photoSub}>(Photo stored on MMDA backend)</Text>
-            </View>
-          )}
+          <View style={styles.photoPlaceholder}>
+            <Text style={styles.photoGlyph}>EVIDENCE</Text>
+            <Text style={styles.photoCaption}>Citizen Photo Evidence</Text>
+            {!report?.photoUrl && <Text style={styles.photoSub}>Photo stored on MMDA backend</Text>}
+          </View>
 
-          {/* AI Verified badge */}
           {report?.aiVerified && (
             <View style={styles.aiBadge}>
-              <Text style={styles.aiBadgeText}>🤖 AI Verified</Text>
+              <Text style={styles.aiBadgeText}>AI VERIFIED</Text>
             </View>
           )}
         </View>
 
-        {/* ── Violation Details ── */}
         <Card style={styles.detailCard}>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Plate</Text>
@@ -179,9 +149,7 @@ export default function ReportDetailScreen({ navigation, route }) {
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Location</Text>
-            <Text style={styles.detailValue} numberOfLines={2}>
-              {report?.address}
-            </Text>
+            <Text style={styles.detailValue} numberOfLines={2}>{report?.address}</Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Reported</Text>
@@ -194,13 +162,8 @@ export default function ReportDetailScreen({ navigation, route }) {
             </Text>
           </View>
 
-          {/* AI Confidence */}
-          <ConfidenceBar
-            value={report?.confidence ?? 0}
-            label="AI Detection Confidence"
-          />
+          <ConfidenceBar value={report?.confidence ?? 0} label="AI Detection Confidence" />
 
-          {/* NCAP ticket if issued */}
           {ncapTicket && (
             <View style={styles.ticketRow}>
               <Text style={styles.ticketLabel}>NCAP Ticket</Text>
@@ -209,16 +172,11 @@ export default function ReportDetailScreen({ navigation, route }) {
           )}
         </Card>
 
-        {/* ── Timer card ── */}
         <Card style={styles.timerCard}>
           <Text style={styles.timerCardTitle}>Enforcer Response Timer</Text>
           <View style={styles.timerRow}>
-            <Text style={[styles.timerBig, { color: timerColor }]}>
-              {formatElapsed(elapsed)}
-            </Text>
-            <Text style={styles.timerTarget}>
-              Target: ≤ {Targets.enforcerResponseTimeSec / 60} min
-            </Text>
+            <Text style={[styles.timerBig, { color: timerColor }]}>{formatElapsed(elapsed)}</Text>
+            <Text style={styles.timerTarget}>Target: 5 min</Text>
           </View>
           <View style={styles.timerBarBg}>
             <View
@@ -233,12 +191,13 @@ export default function ReportDetailScreen({ navigation, route }) {
           </View>
         </Card>
 
-        {/* ── Action Panel ── */}
         {actionDone ? (
           <View style={styles.doneCard}>
-            <Text style={styles.doneIcon}>
-              {actionDone === 'tow' ? '🚚' : actionDone === 'ncap' ? '📋' : '❌'}
-            </Text>
+            <View style={styles.doneGlyph}>
+              <Text style={styles.doneGlyphText}>
+                {actionDone === 'tow' ? 'TOW' : actionDone === 'ncap' ? 'NCAP' : 'VOID'}
+              </Text>
+            </View>
             <Text style={styles.doneText}>
               {actionDone === 'tow'
                 ? 'Tow Dispatched'
@@ -251,54 +210,55 @@ export default function ReportDetailScreen({ navigation, route }) {
           <View style={styles.actionPanel}>
             <Text style={styles.actionTitle}>Action Panel</Text>
 
-            {/* Dispatch Towing */}
             <TouchableOpacity
-              style={[styles.actionBtn, { backgroundColor: Colors.azure }]}
+              style={[styles.actionBtn, styles.actionPrimary]}
               onPress={handleDispatchTow}
               disabled={actionLoading !== null}
+              accessibilityRole="button"
+              accessibilityLabel="Dispatch towing"
             >
               {actionLoading === 'tow' ? (
                 <ActivityIndicator color={Colors.white} />
               ) : (
                 <>
-                  <Text style={styles.actionBtnIcon}>🚚</Text>
+                  <View style={styles.actionIcon}><Text style={styles.actionIconText}>T</Text></View>
                   <Text style={styles.actionBtnText}>Dispatch Towing</Text>
                 </>
               )}
             </TouchableOpacity>
 
-            {/* Issue NCAP Violation */}
             <TouchableOpacity
-              style={[styles.actionBtn, { backgroundColor: Colors.azure, borderColor: Colors.grayGreen, borderWidth: 2 }]}
+              style={[styles.actionBtn, styles.actionNcap]}
               onPress={handleNCAPViolation}
               disabled={actionLoading !== null}
+              accessibilityRole="button"
+              accessibilityLabel="Issue NCAP violation"
             >
               {actionLoading === 'ncap' ? (
                 <ActivityIndicator color={Colors.white} />
               ) : (
                 <>
-                  <Text style={styles.actionBtnIcon}>📋</Text>
+                  <View style={styles.actionIcon}><Text style={styles.actionIconText}>N</Text></View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.actionBtnText}>Issue NCAP Violation</Text>
-                    <Text style={styles.actionBtnSub}>
-                      Pre-fills plate, GPS, timestamp, photo – no manual entry
-                    </Text>
+                    <Text style={styles.actionBtnSub}>Pre-fills plate, GPS, time, and photo</Text>
                   </View>
                 </>
               )}
             </TouchableOpacity>
 
-            {/* Mark as False Alarm */}
             <TouchableOpacity
-              style={[styles.actionBtn, { backgroundColor: Colors.grayDark }]}
+              style={[styles.actionBtn, styles.actionGhost]}
               onPress={handleFalseAlarm}
               disabled={actionLoading !== null}
+              accessibilityRole="button"
+              accessibilityLabel="Mark as false alarm"
             >
               {actionLoading === 'false' ? (
                 <ActivityIndicator color={Colors.white} />
               ) : (
                 <>
-                  <Text style={styles.actionBtnIcon}>❌</Text>
+                  <View style={styles.actionIcon}><Text style={styles.actionIconText}>X</Text></View>
                   <Text style={styles.actionBtnText}>Mark as False Alarm</Text>
                 </>
               )}
@@ -313,7 +273,7 @@ export default function ReportDetailScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
   },
   header: {
     flexDirection: 'row',
@@ -321,15 +281,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.overlayLight,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderSoft,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.grayGreen,
-    minWidth: 80,
+    color: Colors.azure,
+    minWidth: 95,
   },
   headerTitle: {
     ...Typography.heading3,
+    color: Colors.textPrimary,
     fontSize: 15,
   },
   timerBadge: {
@@ -339,6 +302,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     minWidth: 60,
     alignItems: 'center',
+    backgroundColor: Colors.surfaceBase,
   },
   timerText: {
     fontSize: 14,
@@ -358,7 +322,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  photoIcon: { fontSize: 56 },
+  photoGlyph: {
+    ...Typography.bodyBold,
+    color: Colors.white,
+    letterSpacing: 1,
+  },
   photoCaption: {
     ...Typography.bodyBold,
     color: Colors.grayGreen,
@@ -366,7 +334,7 @@ const styles = StyleSheet.create({
   },
   photoSub: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.surfaceMuted,
     marginTop: 4,
   },
   aiBadge: {
@@ -392,16 +360,17 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: Spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.grayDark,
+    borderBottomColor: Colors.borderSoft,
   },
   detailLabel: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.textSecondary,
     width: 80,
     flexShrink: 0,
   },
   detailValue: {
     ...Typography.bodyBold,
+    color: Colors.textPrimary,
     flex: 1,
     textAlign: 'right',
     fontSize: 13,
@@ -416,11 +385,11 @@ const styles = StyleSheet.create({
   },
   ticketLabel: {
     ...Typography.caption,
-    color: Colors.grayGreen,
+    color: Colors.azure,
   },
   ticketNum: {
     ...Typography.bodyBold,
-    color: Colors.grayGreen,
+    color: Colors.azure,
     letterSpacing: 1,
   },
   timerCard: {
@@ -429,6 +398,7 @@ const styles = StyleSheet.create({
   },
   timerCardTitle: {
     ...Typography.label,
+    color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
   timerRow: {
@@ -443,11 +413,11 @@ const styles = StyleSheet.create({
   },
   timerTarget: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.textSecondary,
   },
   timerBarBg: {
     height: 6,
-    backgroundColor: Colors.grayDark,
+    backgroundColor: Colors.borderSoft,
     borderRadius: Radius.full,
     overflow: 'hidden',
   },
@@ -461,6 +431,7 @@ const styles = StyleSheet.create({
   },
   actionTitle: {
     ...Typography.heading3,
+    color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
   actionBtn: {
@@ -471,9 +442,30 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     minHeight: 60,
   },
-  actionBtnIcon: {
-    fontSize: 24,
+  actionPrimary: {
+    backgroundColor: Colors.azure,
+  },
+  actionNcap: {
+    backgroundColor: Colors.azure,
+    borderWidth: 1,
+    borderColor: Colors.grayGreen,
+  },
+  actionGhost: {
+    backgroundColor: Colors.grayDark,
+  },
+  actionIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: Radius.full,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: Spacing.md,
+  },
+  actionIconText: {
+    color: Colors.white,
+    fontWeight: '800',
+    fontSize: 12,
   },
   actionBtnText: {
     ...Typography.bodyBold,
@@ -487,14 +479,29 @@ const styles = StyleSheet.create({
   },
   doneCard: {
     margin: Spacing.md,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.whiteTranslucent,
+    borderWidth: 1,
+    borderColor: Colors.borderSoft,
     borderRadius: Radius.lg,
     padding: Spacing.xl,
     alignItems: 'center',
   },
-  doneIcon: { fontSize: 48, marginBottom: Spacing.sm },
+  doneGlyph: {
+    width: 56,
+    height: 56,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.glowGreen,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.sm,
+  },
+  doneGlyphText: {
+    color: Colors.azure,
+    fontWeight: '800',
+    fontSize: 12,
+  },
   doneText: {
     ...Typography.heading3,
-    color: Colors.grayGreen,
+    color: Colors.textPrimary,
   },
 });

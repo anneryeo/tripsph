@@ -1,14 +1,5 @@
 /**
- * Report Confirm Screen – Step 2 & 3 of Reporting Flow
- *
- * Displays the captured photo with AI annotation overlay:
- * - License plate OCR result with confidence
- * - Violation classification with confidence bar
- * - Gray Green (✓) checkmarks for high-confidence detections
- *
- * Submission path:
- * - High-confidence (≥ 85 %) → Azure "Submit Verified Report to MMDA" button
- * - Low-confidence  (< 85 %) → submitted as Gray pin (manual review)
+ * Report Confirm Screen - AI Verification and Submission
  */
 
 import React, { useState, useEffect } from 'react';
@@ -41,7 +32,6 @@ export default function ReportConfirmScreen({ navigation, route }) {
   const [submitted, setSubmitted] = useState(false);
   const [reportId, setReportId] = useState(null);
 
-  // ── Run AI pipeline on mount ──────────────────────────────────────────────
   useEffect(() => {
     async function runScan() {
       const result = await runAIPipeline(imageUri);
@@ -51,20 +41,19 @@ export default function ReportConfirmScreen({ navigation, route }) {
     runScan();
   }, [imageUri]);
 
-  // ── Submit handler ────────────────────────────────────────────────────────
   const handleSubmit = async (asManual = false) => {
     if (!aiResult) return;
     setSubmitting(true);
     try {
       const { success, reportId: id } = await submitReport({
         imageUri,
-        plateNumber:   aiResult.plateNumber,
+        plateNumber: aiResult.plateNumber,
         violationType: aiResult.violationType,
         latitude,
         longitude,
         timestamp,
-        confidence:    aiResult.violationConfidence,
-        aiVerified:    aiResult.highConfidence && !asManual,
+        confidence: aiResult.violationConfidence,
+        aiVerified: aiResult.highConfidence && !asManual,
       });
       if (success) {
         setReportId(id);
@@ -77,18 +66,19 @@ export default function ReportConfirmScreen({ navigation, route }) {
     }
   };
 
-  // ── Submitted confirmation screen ─────────────────────────────────────────
   if (submitted) {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+        <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
         <View style={styles.successScreen}>
-          <Text style={styles.successIcon}>✅</Text>
-          <Text style={styles.successTitle}>Report Submitted!</Text>
+          <View style={styles.successIconWrap}>
+            <Text style={styles.successIcon}>OK</Text>
+          </View>
+          <Text style={styles.successTitle}>Report Submitted</Text>
           <Text style={styles.successSub}>
             {aiResult?.highConfidence
-              ? 'AI-Verified Report sent to MMDA for immediate action.'
-              : 'Report sent as Manual Review (Gray Pin) to MMDA queue.'}
+              ? 'AI verified report sent to MMDA for immediate action.'
+              : 'Report sent for manual review in the enforcer queue.'}
           </Text>
           <Text style={styles.reportIdLabel}>Report ID</Text>
           <Text style={styles.reportId}>{reportId}</Text>
@@ -96,6 +86,8 @@ export default function ReportConfirmScreen({ navigation, route }) {
           <TouchableOpacity
             style={styles.doneBtn}
             onPress={() => navigation.navigate('MotoristApp')}
+            accessibilityRole="button"
+            accessibilityLabel="Return to motorist app"
           >
             <Text style={styles.doneBtnText}>Done</Text>
           </TouchableOpacity>
@@ -106,50 +98,45 @@ export default function ReportConfirmScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.darkAzure} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
-      {/* ── Header ── */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>‹ Retake</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          accessibilityRole="button"
+          accessibilityLabel="Retake photo"
+        >
+          <Text style={styles.backText}>{'< Retake'}</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>AI Verification</Text>
-        <View style={{ width: 60 }} />
+        <View style={{ width: 70 }} />
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={styles.scrollContent}>
-
-        {/* ── Photo ── */}
         <View style={styles.photoContainer}>
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.photo} resizeMode="cover" />
           ) : (
             <View style={[styles.photo, styles.photoPlaceholder]}>
-              <Text style={{ fontSize: 48 }}>📷</Text>
-              <Text style={[Typography.caption, { marginTop: 8 }]}>No image captured</Text>
+              <Text style={styles.placeholderTitle}>NO IMAGE</Text>
+              <Text style={styles.placeholderSub}>Capture a new photo to continue</Text>
             </View>
           )}
 
-          {/* AI scanning overlay */}
           {scanning && (
             <View style={styles.scanningOverlay}>
               <ActivityIndicator size="large" color={Colors.grayGreen} />
-              <Text style={styles.scanningText}>
-                On-device AI scanning…
-              </Text>
-              <Text style={styles.scanningTarget}>
-                {'< 500ms inference budget'}
-              </Text>
+              <Text style={styles.scanningText}>On-device AI scanning...</Text>
+              <Text style={styles.scanningTarget}>Target budget: under 500ms</Text>
             </View>
           )}
 
-          {/* AI annotation overlay (after scan) */}
           {!scanning && aiResult && (
             <View style={styles.annotationOverlay}>
               <View style={styles.plateBadge}>
                 <Text style={styles.plateText}>{aiResult.plateNumber}</Text>
                 <Text style={styles.plateCheck}>
-                  {aiResult.plateConfidence >= Targets.aiDetectionConfidence ? '✓' : '?'}
+                  {aiResult.plateConfidence >= Targets.aiDetectionConfidence ? 'OK' : '?'}
                 </Text>
               </View>
               <View style={styles.violationLabel}>
@@ -166,95 +153,74 @@ export default function ReportConfirmScreen({ navigation, route }) {
                   ]}
                 >
                   {aiResult.violationConfidence >= Targets.aiDetectionConfidence
-                    ? '✓ Verified'
-                    : '⚠ Low Confidence'}
+                    ? 'Verified'
+                    : 'Low confidence'}
                 </Text>
               </View>
             </View>
           )}
         </View>
 
-        {/* ── AI Results Card ── */}
         {!scanning && aiResult && (
           <Card style={styles.resultsCard}>
             <Text style={styles.resultsTitle}>AI Analysis Results</Text>
-            <Text style={styles.inferenceTime}>
-              Inference: {aiResult.inferenceTimeMs} ms
-            </Text>
+            <Text style={styles.inferenceTime}>Inference: {aiResult.inferenceTimeMs} ms</Text>
 
             <View style={styles.divider} />
 
-            {/* Plate OCR */}
-            <Text style={[Typography.label, { marginBottom: 4 }]}>
-              License Plate OCR
-            </Text>
+            <Text style={styles.sectionLabel}>License Plate OCR</Text>
             <Text style={styles.resultValue}>{aiResult.plateNumber}</Text>
             <ConfidenceBar value={aiResult.plateConfidence} label="OCR Confidence" />
 
             <View style={styles.divider} />
 
-            {/* Violation Classification */}
-            <Text style={[Typography.label, { marginBottom: 4 }]}>
-              Violation Classification
-            </Text>
+            <Text style={styles.sectionLabel}>Violation Classification</Text>
             <Text style={styles.resultValue}>{aiResult.violationType}</Text>
             <ConfidenceBar value={aiResult.violationConfidence} label="Detection Confidence" />
 
             <View style={styles.divider} />
 
-            {/* GPS & Time metadata */}
-            <Text style={[Typography.label, { marginBottom: 6 }]}>
-              Capture Metadata
-            </Text>
+            <Text style={styles.sectionLabel}>Capture Metadata</Text>
             <Text style={styles.metaText}>
-              📍 {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
+              GPS {latitude?.toFixed(6)}, {longitude?.toFixed(6)}
             </Text>
-            <Text style={styles.metaText}>
-              ⏱ {new Date(timestamp).toUTCString()}
-            </Text>
+            <Text style={styles.metaText}>UTC {new Date(timestamp).toUTCString()}</Text>
           </Card>
         )}
 
-        {/* ── Action Buttons ── */}
         {!scanning && aiResult && (
           <View style={styles.actions}>
             {aiResult.highConfidence ? (
-              /* High-confidence: prominent Azure submit button */
               <TouchableOpacity
                 style={styles.submitBtn}
                 onPress={() => handleSubmit(false)}
                 disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel="Submit verified report to MMDA"
               >
                 {submitting ? (
                   <ActivityIndicator color={Colors.white} />
                 ) : (
                   <>
-                    <Text style={styles.submitBtnText}>
-                      Submit Verified Report to MMDA
-                    </Text>
-                    <Text style={styles.submitBtnSub}>
-                      High Confidence – AI Verified ✓
-                    </Text>
+                    <Text style={styles.submitBtnText}>Submit Verified Report to MMDA</Text>
+                    <Text style={styles.submitBtnSub}>High confidence - AI verified</Text>
                   </>
                 )}
               </TouchableOpacity>
             ) : (
-              /* Low-confidence: gray manual review button */
               <TouchableOpacity
                 style={styles.manualBtn}
                 onPress={() => handleSubmit(true)}
                 disabled={submitting}
+                accessibilityRole="button"
+                accessibilityLabel="Submit report for manual review"
               >
                 {submitting ? (
                   <ActivityIndicator color={Colors.white} />
                 ) : (
                   <>
-                    <Text style={styles.manualBtnText}>
-                      Submit for Manual Review
-                    </Text>
-                    <Text style={styles.manualBtnSub}>
-                      Low Confidence – Gray Pin · Enforcer Review Queue
-                    </Text>
+                    <Text style={styles.manualBtnText}>Submit for Manual Review</Text>
+                    <Text style={styles.manualBtnSub}>Low confidence - enforcer review queue</Text>
                   </>
                 )}
               </TouchableOpacity>
@@ -263,8 +229,10 @@ export default function ReportConfirmScreen({ navigation, route }) {
             <TouchableOpacity
               style={styles.cancelBtn}
               onPress={() => navigation.goBack()}
+              accessibilityRole="button"
+              accessibilityLabel="Discard and retake"
             >
-              <Text style={styles.cancelText}>{'Discard & Retake'}</Text>
+              <Text style={styles.cancelText}>Discard and Retake</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -276,7 +244,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.darkAzure,
+    backgroundColor: Colors.backgroundTint,
   },
   header: {
     flexDirection: 'row',
@@ -284,15 +252,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.overlayLight,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.borderSoft,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.grayGreen,
-    width: 60,
+    color: Colors.azure,
+    width: 70,
   },
   headerTitle: {
     ...Typography.heading3,
+    color: Colors.textPrimary,
   },
   scrollContent: {
     paddingBottom: Spacing.xxl,
@@ -301,7 +272,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     height: width * 0.75,
-    backgroundColor: '#000',
+    backgroundColor: '#000000',
   },
   photo: {
     width: '100%',
@@ -311,6 +282,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.azure,
+  },
+  placeholderTitle: {
+    ...Typography.bodyBold,
+    color: Colors.white,
+    letterSpacing: 1,
+  },
+  placeholderSub: {
+    ...Typography.caption,
+    color: Colors.surfaceMuted,
+    marginTop: 6,
   },
   scanningOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -326,6 +307,7 @@ const styles = StyleSheet.create({
   scanningTarget: {
     ...Typography.caption,
     marginTop: 4,
+    color: Colors.white,
   },
   annotationOverlay: {
     position: 'absolute',
@@ -350,11 +332,13 @@ const styles = StyleSheet.create({
     ...Typography.bodyBold,
     fontSize: 15,
     letterSpacing: 2,
+    color: Colors.white,
   },
   plateCheck: {
-    ...Typography.bodyBold,
+    ...Typography.caption,
     color: Colors.grayGreen,
     marginLeft: 6,
+    fontWeight: '700',
   },
   violationLabel: {
     flexDirection: 'row',
@@ -379,24 +363,32 @@ const styles = StyleSheet.create({
   },
   resultsTitle: {
     ...Typography.heading3,
+    color: Colors.textPrimary,
   },
   inferenceTime: {
     ...Typography.caption,
-    color: Colors.grayGreen,
+    color: Colors.textSecondary,
     marginTop: 2,
+  },
+  sectionLabel: {
+    ...Typography.label,
+    color: Colors.textPrimary,
+    marginBottom: 4,
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.grayDark,
+    backgroundColor: Colors.borderSoft,
     marginVertical: Spacing.sm,
   },
   resultValue: {
     ...Typography.bodyBold,
+    color: Colors.textPrimary,
     fontSize: 18,
     marginBottom: 4,
   },
   metaText: {
     ...Typography.caption,
+    color: Colors.textSecondary,
     marginBottom: 2,
   },
   actions: {
@@ -409,11 +401,17 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: Colors.grayGreen,
+    shadowColor: Colors.darkAzure,
+    shadowOpacity: 0.2,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 4,
   },
   submitBtnText: {
     ...Typography.bodyBold,
+    color: Colors.white,
     fontSize: 16,
   },
   submitBtnSub: {
@@ -435,7 +433,7 @@ const styles = StyleSheet.create({
   },
   manualBtnSub: {
     ...Typography.caption,
-    color: Colors.gray,
+    color: Colors.surfaceMuted,
     marginTop: 4,
   },
   cancelBtn: {
@@ -444,7 +442,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     ...Typography.body,
-    color: Colors.gray,
+    color: Colors.textSecondary,
     textDecorationLine: 'underline',
   },
   successScreen: {
@@ -453,20 +451,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: Spacing.xl,
   },
-  successIcon: { fontSize: 72, marginBottom: Spacing.lg },
+  successIconWrap: {
+    width: 76,
+    height: 76,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.glowGreen,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: Spacing.lg,
+  },
+  successIcon: {
+    fontWeight: '800',
+    color: Colors.azure,
+    letterSpacing: 1,
+  },
   successTitle: {
     ...Typography.heading1,
+    color: Colors.textPrimary,
     marginBottom: Spacing.sm,
   },
   successSub: {
     ...Typography.body,
-    color: Colors.gray,
+    color: Colors.textSecondary,
     textAlign: 'center',
     marginBottom: Spacing.xl,
     lineHeight: 22,
   },
   reportIdLabel: {
     ...Typography.caption,
+    color: Colors.textSecondary,
     letterSpacing: 2,
     textTransform: 'uppercase',
     marginBottom: 4,
@@ -474,7 +487,7 @@ const styles = StyleSheet.create({
   reportId: {
     ...Typography.bodyBold,
     fontSize: 18,
-    color: Colors.grayGreen,
+    color: Colors.azure,
     marginBottom: Spacing.xl,
     letterSpacing: 1,
   },
@@ -486,6 +499,7 @@ const styles = StyleSheet.create({
   },
   doneBtnText: {
     ...Typography.bodyBold,
+    color: Colors.white,
     fontSize: 16,
   },
 });
