@@ -39,6 +39,14 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
   const [reports] = useState(MOCK_REPORTS);
   const [view, setView] = useState('map');
 
+  const handleReturn = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+    navigation.navigate('RoleSelect');
+  };
+
   const pendingCount = reports.filter((r) => r.status === 'pending').length;
   const aiCount = reports.filter((r) => r.aiVerified).length;
   const manualCount = Math.max(pendingCount - aiCount, 0);
@@ -56,7 +64,10 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
-        <View>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity onPress={handleReturn} style={styles.returnBtn} accessibilityRole="button" accessibilityLabel="Return">
+            <Text style={styles.returnText}>Return</Text>
+          </TouchableOpacity>
           <Text style={styles.topTitle}>Enforcer Dashboard</Text>
           <Text style={styles.topSub}>Badge: {enforcerId}</Text>
         </View>
@@ -113,6 +124,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.overlayLight,
     borderBottomWidth: 1,
     borderBottomColor: Colors.borderSoft,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  returnBtn: {
+    alignSelf: 'flex-start',
+    marginBottom: 2,
+  },
+  returnText: {
+    ...Typography.bodyBold,
+    color: Colors.azure,
+    fontSize: 13,
   },
   topTitle: {
     ...Typography.heading3,

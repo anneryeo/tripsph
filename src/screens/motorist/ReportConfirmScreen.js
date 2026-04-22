@@ -89,7 +89,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
             accessibilityRole="button"
             accessibilityLabel="Return to motorist app"
           >
-            <Text style={styles.doneBtnText}>Done</Text>
+            <Text style={styles.doneBtnText}>Return</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -104,9 +104,9 @@ export default function ReportConfirmScreen({ navigation, route }) {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           accessibilityRole="button"
-          accessibilityLabel="Retake photo"
+          accessibilityLabel="Return"
         >
-          <Text style={styles.backText}>{'< Retake'}</Text>
+          <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>AI Verification</Text>
         <View style={{ width: 70 }} />

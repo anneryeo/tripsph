@@ -115,7 +115,7 @@ export default function ReportDetailScreen({ navigation, route }) {
           accessibilityRole="button"
           accessibilityLabel="Back to dashboard"
         >
-          <Text style={styles.backText}>{'< Dashboard'}</Text>
+          <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Violation Report</Text>
         <View style={[styles.timerBadge, { borderColor: timerColor }]}>

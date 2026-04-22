@@ -60,7 +60,7 @@ export default function EnforcerLoginScreen({ navigation }) {
       >
         {/* ── Back ── */}
         <TouchableOpacity style={styles.back} onPress={() => navigation.goBack()}>
-          <Text style={styles.backText}>{'< Back'}</Text>
+          <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
 
         {/* ── Shield icon ── */}

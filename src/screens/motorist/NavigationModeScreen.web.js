@@ -44,7 +44,7 @@ export default function NavigationModeScreen({ navigation, route }) {
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>{'< Back'}</Text>
+          <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
         <View style={styles.topCenter}>
           <Text style={styles.navTitle}>Navigation Mode</Text>

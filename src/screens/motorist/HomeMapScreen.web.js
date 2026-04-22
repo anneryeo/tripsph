@@ -19,6 +19,14 @@ export default function HomeMapScreen({ navigation }) {
   const [lastRefresh, setLastRefresh] = useState(null);
   const [connected, setConnected] = useState(false);
 
+  const handleReturn = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+    navigation.navigate('RoleSelect');
+  };
+
   const handleWsMessage = useCallback((msg) => {
     if (msg.type === 'connected') setConnected(true);
     if (msg.type === 'disconnected') setConnected(false);
@@ -52,6 +60,9 @@ export default function HomeMapScreen({ navigation }) {
       <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
+        <TouchableOpacity onPress={handleReturn} style={styles.returnBtn} accessibilityRole="button" accessibilityLabel="Return">
+          <Text style={styles.returnText}>Return</Text>
+        </TouchableOpacity>
         <View>
           <Text style={styles.appTitle}>TRIPS PH</Text>
           <Text style={styles.appSubtitle}>Live Risk Map (Web Prototype)</Text>
@@ -112,6 +123,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.overlayLight,
     borderBottomWidth: 1,
     borderBottomColor: Colors.borderSoft,
+  },
+  returnBtn: {
+    marginRight: Spacing.sm,
+  },
+  returnText: {
+    ...Typography.bodyBold,
+    color: Colors.azure,
   },
   appTitle: {
     fontSize: 22,

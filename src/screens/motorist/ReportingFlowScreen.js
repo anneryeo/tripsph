@@ -26,9 +26,20 @@ export default function ReportingFlowScreen({ navigation }) {
   const [flash, setFlash] = useState('off');
   const cameraRef = useRef(null);
 
+  const handleReturn = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+    navigation.navigate('RoleSelect');
+  };
+
   if (!permission) {
     return (
       <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.fallbackReturnBtn} onPress={handleReturn} accessibilityRole="button" accessibilityLabel="Return">
+          <Text style={styles.fallbackReturnText}>Return</Text>
+        </TouchableOpacity>
         <View style={styles.centeredMsg}>
           <Text style={styles.centerMsgText}>Checking camera permissions...</Text>
         </View>
@@ -40,6 +51,9 @@ export default function ReportingFlowScreen({ navigation }) {
     return (
       <SafeAreaView style={styles.permissionContainer}>
         <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+        <TouchableOpacity style={styles.fallbackReturnBtn} onPress={handleReturn} accessibilityRole="button" accessibilityLabel="Return">
+          <Text style={styles.fallbackReturnText}>Return</Text>
+        </TouchableOpacity>
         <View style={styles.permissionCard}>
           <View style={styles.permissionIcon}>
             <Text style={styles.permissionIconText}>CAM</Text>
@@ -101,12 +115,12 @@ export default function ReportingFlowScreen({ navigation }) {
         <View style={styles.overlay}>
           <View style={styles.topOverlay}>
             <TouchableOpacity
-              onPress={() => navigation.goBack()}
+              onPress={handleReturn}
               style={styles.backBtn}
               accessibilityRole="button"
-              accessibilityLabel="Back"
+              accessibilityLabel="Return"
             >
-              <Text style={styles.backText}>{'< Back'}</Text>
+              <Text style={styles.backText}>Return</Text>
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Capture Violation</Text>
             <Text style={styles.headerSub}>Center the vehicle plate and violation area</Text>
@@ -160,9 +174,16 @@ const styles = StyleSheet.create({
   permissionContainer: {
     flex: 1,
     backgroundColor: Colors.backgroundTint,
-    alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: Spacing.lg,
+  },
+  fallbackReturnBtn: {
+    alignSelf: 'flex-start',
+    marginTop: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  fallbackReturnText: {
+    ...Typography.bodyBold,
+    color: Colors.azure,
   },
   permissionCard: {
     width: '100%',
