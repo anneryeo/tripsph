@@ -27,6 +27,8 @@ const DEFAULT_REGION = {
   longitudeDelta: 0.08,
 };
 
+const TAB_BAR_CLEARANCE = 96;
+
 function ParkingMarker({ structure }) {
   const full = structure.occupancy >= 90;
   return (
@@ -258,6 +260,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundTint,
+    paddingBottom: TAB_BAR_CLEARANCE,
   },
   topBar: {
     flexDirection: 'row',

@@ -44,6 +44,8 @@ const INITIAL_REGION = {
   longitudeDelta: 0.04,
 };
 
+const TAB_BAR_CLEARANCE = 96;
+
 const darkMapStyle = [
   { elementType: 'geometry', stylers: [{ color: '#163b42' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#ffffff' }] },
@@ -235,6 +237,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundTint,
+    paddingBottom: TAB_BAR_CLEARANCE,
   },
   topBar: {
     flexDirection: 'row',

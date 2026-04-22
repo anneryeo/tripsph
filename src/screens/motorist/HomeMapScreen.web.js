@@ -15,6 +15,8 @@ import { getBannerText, getBannerColor } from '../../services/OIEService';
 import { wsService } from '../../services/WebSocketService';
 import { VerdictBadge } from '../../components/UIComponents';
 
+const TAB_BAR_CLEARANCE = 96;
+
 export default function HomeMapScreen({ navigation }) {
   const [verdict, setVerdict] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
@@ -136,6 +138,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundTint,
+    paddingBottom: TAB_BAR_CLEARANCE,
   },
   topBar: {
     flexDirection: 'row',

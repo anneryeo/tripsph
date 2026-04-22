@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.edgeHighlight,
     borderRadius: Radius.xl,
     margin: Spacing.md,
-    marginBottom: 0,
+    marginBottom: Spacing.sm,
   },
   topTitle: {
     ...Typography.heading3,

@@ -15,6 +15,8 @@ const DESTINATION = {
   name: 'Robinsons Galleria',
 };
 
+const TAB_BAR_CLEARANCE = 96;
+
 export default function NavigationModeScreen({ navigation, route }) {
   const initialVerdict = route.params?.verdict ?? null;
   const [verdict, setVerdict] = useState(initialVerdict);
@@ -98,6 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.backgroundTint,
+    paddingBottom: TAB_BAR_CLEARANCE,
   },
   topBar: {
     flexDirection: 'row',
