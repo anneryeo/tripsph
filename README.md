@@ -26,8 +26,8 @@ This project is under the team **Cardinal Forge**, affiliated with Mapua Univers
 _Entered: April 22, 2026_
 
 ## Relevant Documents and Files
-[Working Doc](https://docs.google.com/document/d/1E3p7VCVAvXNghofW3FSRjMIfbqWHmr53z9GbF_0J9qg/edit?usp=sharing) | [Pitch Deck 1 (Reading Sub)](https://canva.link/8q73uiq1l2m30u7)
-| --- | --- |
+[Working Doc](https://docs.google.com/document/d/1E3p7VCVAvXNghofW3FSRjMIfbqWHmr53z9GbF_0J9qg/edit?usp=sharing) | [Pitch Deck 1 (Reading Sub)](https://canva.link/8q73uiq1l2m30u7) | [Mockup Webview](https://tripsph.netlify.app/)
+| --- | --- | --- |
 
 ---
 
