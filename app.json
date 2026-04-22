@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "TRIPS PH",
+    "slug": "tripsph",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#163b42"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ph.mmda.tripsph",
+      "infoPlist": {
+        "NSCameraUsageDescription": "TRIPS PH uses your camera to capture parking violation photos for AI-verified reporting.",
+        "NSLocationWhenInUseUsageDescription": "TRIPS PH uses your location to provide real-time parking risk information at your exact GPS coordinate.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "TRIPS PH uses your location to provide real-time parking risk information at your exact GPS coordinate."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#163b42"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "ph.mmda.tripsph",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-camera",
+      "expo-location"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "tripsph-mmda"
+      }
+    }
+  }
+}
