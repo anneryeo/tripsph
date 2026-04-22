@@ -29,7 +29,7 @@ export default function RoleSelectScreen({ navigation }) {
         </View>
         <Text style={styles.appName}>TRIPS PH</Text>
         <Text style={styles.tagline}>
-          Traffic Routing &amp; Intelligent Parking System
+          Traffic Routing & Intelligent Parking System
         </Text>
         <Text style={styles.subtitle}>
           Bagong Gawi · Bagong Galaw
@@ -68,7 +68,7 @@ export default function RoleSelectScreen({ navigation }) {
             <Text style={styles.roleTitle}>MMDA Enforcer</Text>
             <Text style={styles.roleDesc}>
               Authorized access only · AI-prioritized reports ·{'\n'}
-              NCAP dispatch &amp; ticketing
+              NCAP dispatch & ticketing
             </Text>
           </View>
           <Text style={styles.roleArrow}>›</Text>

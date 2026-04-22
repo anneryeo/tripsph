@@ -90,10 +90,12 @@ export default function HomeMapScreen({ navigation }) {
   }, [handleWsMessage, userLocation]);
 
   // ── Simulate getting user location (GPS) ─────────────────────────────────
+  // Demo: fixed location in Ortigas Center area.
+  // Production: replace with expo-location getCurrentPositionAsync().
   useEffect(() => {
     const mockLoc = {
-      latitude:  14.5876 + (Math.random() - 0.5) * 0.02,
-      longitude: 121.0607 + (Math.random() - 0.5) * 0.02,
+      latitude:  14.5876,
+      longitude: 121.0607,
     };
     setUserLoc(mockLoc);
     wsService.sendLocation(mockLoc.latitude, mockLoc.longitude);

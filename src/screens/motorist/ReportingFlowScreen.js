@@ -71,10 +71,11 @@ export default function ReportingFlowScreen({ navigation }) {
       // Record GPS and UTC timestamp atomically with the photo
       const timestamp = Date.now();
 
-      // Mock GPS (in production: use expo-location)
+      // Demo: fixed GPS coordinates in Ortigas Center area.
+      // Production: replace with expo-location getCurrentPositionAsync().
       const gpsCoords = {
-        latitude:  14.5876 + (Math.random() - 0.5) * 0.01,
-        longitude: 121.0607 + (Math.random() - 0.5) * 0.01,
+        latitude:  14.5876,
+        longitude: 121.0607,
         accuracy:  5,
       };
 
@@ -160,7 +161,7 @@ export default function ReportingFlowScreen({ navigation }) {
           📍 GPS · ⏱ UTC Timestamp captured automatically
         </Text>
         <Text style={styles.infoSub}>
-          On-device AI will scan for violations in &lt;500ms
+          {'On-device AI will scan for violations in <500ms'}
         </Text>
       </View>
     </SafeAreaView>

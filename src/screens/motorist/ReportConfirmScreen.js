@@ -138,7 +138,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
                 On-device AI scanning…
               </Text>
               <Text style={styles.scanningTarget}>
-                &lt; 500ms inference budget
+                {'< 500ms inference budget'}
               </Text>
             </View>
           )}
@@ -264,7 +264,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
               style={styles.cancelBtn}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.cancelText}>Discard &amp; Retake</Text>
+              <Text style={styles.cancelText}>{'Discard & Retake'}</Text>
             </TouchableOpacity>
           </View>
         )}

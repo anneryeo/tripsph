@@ -126,8 +126,8 @@ function haversineMeters(lat1, lon1, lat2, lon2) {
 export async function queryOIE(latitude, longitude) {
   const start = Date.now();
 
-  // Simulate async network call
-  await new Promise((resolve) => setTimeout(resolve, Math.random() * 80 + 20));
+  // Simulate async network call (fixed demo delay; production uses real WebSocket)
+  await new Promise((resolve) => setTimeout(resolve, 50));
 
   let result = {
     verdict: OIEVerdict.LEGAL,
