@@ -107,7 +107,7 @@ export default function ReportDetailScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -280,14 +280,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
     minWidth: 95,
   },
   headerTitle: {
@@ -314,7 +317,7 @@ const styles = StyleSheet.create({
   photoCard: {
     width: '100%',
     height: width * 0.6,
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.surfaceMuted,
     position: 'relative',
   },
   photoPlaceholder: {
@@ -341,7 +344,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Spacing.sm,
     right: Spacing.sm,
-    backgroundColor: Colors.alarmRed,
+    backgroundColor: 'rgba(255,91,110,0.18)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: Radius.sm,
@@ -378,7 +381,7 @@ const styles = StyleSheet.create({
   ticketRow: {
     marginTop: Spacing.sm,
     padding: Spacing.sm,
-    backgroundColor: Colors.grayGreen + '22',
+    backgroundColor: 'rgba(49,184,123,0.14)',
     borderRadius: Radius.sm,
     borderLeftWidth: 3,
     borderLeftColor: Colors.grayGreen,
@@ -446,12 +449,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.azure,
   },
   actionNcap: {
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.surfaceMuted,
     borderWidth: 1,
-    borderColor: Colors.grayGreen,
+    borderColor: 'rgba(255,255,255,0.18)',
   },
   actionGhost: {
-    backgroundColor: Colors.grayDark,
+    backgroundColor: 'rgba(255,91,110,0.16)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,91,110,0.24)',
   },
   actionIcon: {
     width: 28,

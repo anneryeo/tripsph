@@ -21,9 +21,9 @@ import { Colors, Typography, Spacing, Radius, Gradients } from '../constants/the
 export default function RoleSelectScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
       <LinearGradient
-        colors={Gradients.heroSky}
+        colors={Gradients.brand}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientBg}
@@ -33,6 +33,7 @@ export default function RoleSelectScreen({ navigation }) {
 
       {/* ── Logo / Brand ── */}
       <View style={styles.brand}>
+        <Text style={styles.eyebrow}>Urban routing and enforcement</Text>
         <View style={styles.logoBadge}>
           <Image
             source={require('../../assets/TRIPSPH-logo-white.png')}
@@ -44,13 +45,13 @@ export default function RoleSelectScreen({ navigation }) {
           Traffic Routing & Intelligent Parking System
         </Text>
         <Text style={styles.subtitle}>
-          Bagong Gawi · Bagong Galaw
+          Choose an operational mode to continue
         </Text>
       </View>
 
       {/* ── Role Selection ── */}
       <View style={styles.roleSection}>
-        <Text style={styles.prompt}>Select your role to continue</Text>
+        <Text style={styles.prompt}>Select mode</Text>
 
         {/* Motorist Button */}
         <TouchableOpacity
@@ -66,11 +67,10 @@ export default function RoleSelectScreen({ navigation }) {
           <View style={styles.roleInfo}>
             <Text style={styles.roleTitle}>Motorist</Text>
             <Text style={styles.roleDesc}>
-              Live parking risk map · Real-time OIE verdicts ·{'\n'}
-              Report violations with AI verification
+              Route guidance, parking risk, and reporting
             </Text>
           </View>
-          <Text style={styles.roleArrow}>></Text>
+          <Text style={styles.roleArrow}>GO</Text>
         </TouchableOpacity>
 
         {/* Enforcer Button */}
@@ -87,11 +87,10 @@ export default function RoleSelectScreen({ navigation }) {
           <View style={styles.roleInfo}>
             <Text style={styles.roleTitle}>MMDA Enforcer</Text>
             <Text style={styles.roleDesc}>
-              Authorized access only · AI-prioritized reports ·{'\n'}
-              NCAP dispatch & ticketing
+              Secure triage, evidence review, and dispatch
             </Text>
           </View>
-          <Text style={styles.roleArrow}>></Text>
+          <Text style={styles.roleArrow}>GO</Text>
         </TouchableOpacity>
       </View>
 
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     top: -70,
     left: -40,
-    backgroundColor: 'rgba(12,127,166,0.2)',
+    backgroundColor: 'rgba(47,212,255,0.14)',
   },
   bgOrbB: {
     position: 'absolute',
@@ -133,12 +132,19 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     bottom: 80,
     right: -80,
-    backgroundColor: 'rgba(49,184,123,0.14)',
+    backgroundColor: 'rgba(12,127,166,0.16)',
   },
   brand: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: Spacing.xxl,
     marginBottom: Spacing.xl,
+  },
+  eyebrow: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    textTransform: 'uppercase',
+    letterSpacing: 1.2,
+    marginBottom: Spacing.md,
   },
   logoBadge: {
     width: 228,
@@ -162,16 +168,16 @@ const styles = StyleSheet.create({
     height: '74%',
   },
   tagline: {
-    ...Typography.bodyBold,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    marginTop: Spacing.xs,
+    ...Typography.heading1,
+    color: Colors.textPrimary,
+    textAlign: 'left',
+    maxWidth: 300,
   },
   subtitle: {
-    ...Typography.caption,
-    color: Colors.azure,
-    marginTop: 4,
-    letterSpacing: 1,
+    ...Typography.body,
+    color: Colors.textSecondary,
+    marginTop: Spacing.sm,
+    maxWidth: 280,
   },
   roleSection: {
     flex: 1,
@@ -179,29 +185,29 @@ const styles = StyleSheet.create({
   },
   prompt: {
     ...Typography.caption,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: Spacing.md,
     letterSpacing: 1,
     textTransform: 'uppercase',
-    color: Colors.textSecondary,
+    color: Colors.textTertiary,
   },
   roleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.55)',
-    shadowColor: Colors.darkAzure,
+    borderColor: Colors.edgeHighlight,
+    shadowColor: Colors.routeTeal,
     shadowOpacity: 0.12,
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },
   enforcerCard: {
-    borderColor: Colors.orange + '55',
+    borderColor: 'rgba(255,154,74,0.28)',
   },
   roleIconWrap: {
     width: 44,
@@ -212,10 +218,14 @@ const styles = StyleSheet.create({
     marginRight: Spacing.md,
   },
   motoristIcon: {
-    backgroundColor: Colors.glowGreen,
+    backgroundColor: 'rgba(47,212,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(47,212,255,0.25)',
   },
   enforcerIcon: {
-    backgroundColor: Colors.glowAzure,
+    backgroundColor: 'rgba(255,154,74,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,154,74,0.24)',
   },
   roleIconLabel: {
     fontSize: 16,
@@ -231,14 +241,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   roleDesc: {
-    ...Typography.caption,
+    ...Typography.body,
     color: Colors.textSecondary,
-    lineHeight: 18,
+    lineHeight: 20,
   },
   roleArrow: {
-    fontSize: 28,
-    color: Colors.azure,
-    fontWeight: '300',
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   footer: {
     alignItems: 'center',
@@ -246,7 +257,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     ...Typography.caption,
-    color: Colors.textSecondary,
+    color: Colors.textTertiary,
     marginBottom: 2,
   },
 });

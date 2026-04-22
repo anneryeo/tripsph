@@ -50,7 +50,7 @@ export default function ReportingFlowScreen({ navigation }) {
   if (!permission.granted) {
     return (
       <SafeAreaView style={styles.permissionContainer}>
-        <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+        <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
         <TouchableOpacity style={styles.fallbackReturnBtn} onPress={handleReturn} accessibilityRole="button" accessibilityLabel="Return">
           <Text style={styles.fallbackReturnText}>Return</Text>
         </TouchableOpacity>
@@ -183,17 +183,17 @@ const styles = StyleSheet.create({
   },
   fallbackReturnText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
   },
   permissionCard: {
     width: '100%',
     backgroundColor: Colors.whiteTranslucent,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
-    borderRadius: Radius.lg,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
     padding: Spacing.xl,
     alignItems: 'center',
-    shadowColor: Colors.darkAzure,
+    shadowColor: Colors.routeTeal,
     shadowOpacity: 0.12,
     shadowRadius: 22,
     shadowOffset: { width: 0, height: 8 },
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.azure,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
   },
   permBtnText: {
     ...Typography.bodyBold,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.md,
     paddingHorizontal: Spacing.md,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: Colors.overlayDark,
     alignItems: 'center',
   },
   backBtn: {

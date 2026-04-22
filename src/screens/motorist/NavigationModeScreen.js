@@ -130,16 +130,17 @@ export default function NavigationModeScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       {/* ── Top Nav Bar ── */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Text style={styles.backText}>{'< Back'}</Text>
+          <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
         <View style={styles.topCenter}>
-          <Text style={styles.navTitle}>Navigation Mode</Text>
-          <Text style={styles.destLabel}>→ {DESTINATION.name}</Text>
+          <Text style={styles.navMeta}>Destination</Text>
+          <Text style={styles.navTitle}>{DESTINATION.name}</Text>
+          <Text style={styles.destLabel}>Guided route with ordinance awareness</Text>
         </View>
         <View style={{ width: 60 }} />
       </View>
@@ -204,7 +205,7 @@ export default function NavigationModeScreen({ navigation, route }) {
       <Animated.View
         style={[
           styles.riskBanner,
-          { backgroundColor: bannerColor },
+          { borderColor: bannerColor },
           isHighRisk && { opacity: flashAnim },
         ]}
       >
@@ -239,25 +240,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   backBtn: {
     width: 60,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
+  },
+  navMeta: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   topCenter: {
     flex: 1,
     alignItems: 'center',
   },
   navTitle: {
-    ...Typography.bodyBold,
-    fontSize: 15,
+    ...Typography.heading3,
     color: Colors.textPrimary,
   },
   destLabel: {
@@ -267,6 +276,9 @@ const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
     position: 'relative',
+    margin: Spacing.md,
+    borderRadius: Radius.xl,
+    overflow: 'hidden',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -276,12 +288,12 @@ const styles = StyleSheet.create({
     top: Spacing.sm,
     left: Spacing.sm,
     backgroundColor: Colors.whiteTranslucent,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
   },
   zoomControls: {
     position: 'absolute',
@@ -295,7 +307,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     backgroundColor: Colors.whiteTranslucent,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -318,7 +330,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: Radius.full,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.surfaceBase,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -330,10 +342,15 @@ const styles = StyleSheet.create({
     color: Colors.azure,
   },
   riskBanner: {
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     minHeight: 80,
     justifyContent: 'center',
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderRadius: Radius.xl,
   },
   bannerContent: {
     flexDirection: 'row',
@@ -362,13 +379,16 @@ const styles = StyleSheet.create({
     ...Typography.bodyBold,
     fontSize: 15,
     lineHeight: 20,
+    color: Colors.textPrimary,
   },
   bannerZone: {
     ...Typography.caption,
     marginTop: 2,
+    color: Colors.textSecondary,
   },
   bannerSub: {
     ...Typography.caption,
     marginTop: 4,
+    color: Colors.textTertiary,
   },
 });

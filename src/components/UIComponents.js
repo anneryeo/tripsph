@@ -6,22 +6,25 @@ import React from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, Typography, Spacing, Radius } from '../constants/theme';
 
 // ── Primary Button ────────────────────────────────────────────────────────────
 export function PrimaryButton({ title, onPress, loading, style, textStyle }) {
   return (
     <TouchableOpacity
-      style={[styles.primaryBtn, style]}
+      style={[styles.buttonWrap, style]}
       onPress={onPress}
       activeOpacity={0.8}
       disabled={loading}
     >
-      {loading ? (
-        <ActivityIndicator color={Colors.white} />
-      ) : (
-        <Text style={[styles.primaryBtnText, textStyle]}>{title}</Text>
-      )}
+      <LinearGradient colors={[Colors.azure, Colors.routeTeal]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.primaryBtn}>
+        {loading ? (
+          <ActivityIndicator color={Colors.white} />
+        ) : (
+          <Text style={[styles.primaryBtnText, textStyle]}>{title}</Text>
+        )}
+      </LinearGradient>
     </TouchableOpacity>
   );
 }
@@ -131,16 +134,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   dangerBtn: {
-    backgroundColor: Colors.alarmRed,
+    backgroundColor: 'rgba(255,91,110,0.18)',
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: 'rgba(255,91,110,0.4)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   ghostBtn: {
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.7)',
+    borderColor: Colors.edgeHighlight,
     backgroundColor: Colors.whiteTranslucent,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
@@ -150,10 +155,12 @@ const styles = StyleSheet.create({
   },
   ghostBtnText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.textPrimary,
     fontSize: 16,
   },
   badge: {
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
     borderRadius: Radius.full,
@@ -167,16 +174,16 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   card: {
-    backgroundColor: 'rgba(255,255,255,0.76)',
-    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderRadius: Radius.lg,
     padding: Spacing.md,
     marginVertical: Spacing.xs,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.65)',
-    shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    shadowOffset: { width: 0, height: 8 },
+    borderColor: Colors.edgeHighlight,
+    shadowColor: Colors.routeTeal,
+    shadowOpacity: 0.14,
+    shadowRadius: 22,
+    shadowOffset: { width: 0, height: 10 },
     elevation: 3,
   },
   sectionHeader: {
@@ -194,7 +201,7 @@ const styles = StyleSheet.create({
   },
   barBg: {
     height: 8,
-    backgroundColor: Colors.grayDark,
+    backgroundColor: Colors.surfaceMuted,
     borderRadius: Radius.full,
     overflow: 'hidden',
     marginTop: 4,
@@ -202,5 +209,23 @@ const styles = StyleSheet.create({
   barFill: {
     height: '100%',
     borderRadius: Radius.full,
+  },
+  buttonWrap: {
+    borderRadius: Radius.full,
+    overflow: 'hidden',
+    shadowColor: Colors.routeTeal,
+    shadowOpacity: 0.2,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 5,
+  },
+  primaryBtn: {
+    paddingVertical: 15,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: Radius.full,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

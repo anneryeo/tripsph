@@ -69,7 +69,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
   if (submitted) {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+        <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
         <View style={styles.successScreen}>
           <View style={styles.successIconWrap}>
             <Text style={styles.successIcon}>OK</Text>
@@ -98,7 +98,7 @@ export default function ReportConfirmScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -251,14 +251,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
     width: 70,
   },
   headerTitle: {
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     height: width * 0.75,
-    backgroundColor: '#000000',
+    backgroundColor: Colors.surfaceElevated,
   },
   photo: {
     width: '100%',
@@ -281,7 +284,7 @@ const styles = StyleSheet.create({
   photoPlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.surfaceMuted,
   },
   placeholderTitle: {
     ...Typography.bodyBold,
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
   },
   scanningOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(22,59,66,0.85)',
+    backgroundColor: Colors.overlayDark,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -360,6 +363,7 @@ const styles = StyleSheet.create({
   },
   resultsCard: {
     margin: Spacing.md,
+    marginTop: Spacing.lg,
   },
   resultsTitle: {
     ...Typography.heading3,
@@ -397,16 +401,16 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     backgroundColor: Colors.azure,
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.grayGreen,
-    shadowColor: Colors.darkAzure,
+    borderColor: 'rgba(255,255,255,0.18)',
+    shadowColor: Colors.routeTeal,
     shadowOpacity: 0.2,
-    shadowRadius: 14,
-    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
     elevation: 4,
   },
   submitBtnText: {
@@ -421,10 +425,12 @@ const styles = StyleSheet.create({
   },
   manualBtn: {
     backgroundColor: Colors.grayDark,
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
     paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,154,74,0.25)',
   },
   manualBtnText: {
     ...Typography.bodyBold,
@@ -495,7 +501,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.azure,
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.md,
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
   },
   doneBtnText: {
     ...Typography.bodyBold,

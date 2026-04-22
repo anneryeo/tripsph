@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     backgroundColor: Colors.darkAzure,
   },
   appSafeArea: {

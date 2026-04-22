@@ -8,43 +8,49 @@ import { Platform } from 'react-native';
 // ── Color Palette ──────────────────────────────────────────────────────────────
 export const Colors = {
   // Core background / surface
-  darkAzure: '#0f3444',       // Background / Deep Brand Base
-  azure: '#0c7fa6',           // Primary Accent / Buttons / Nav Bar
-  azureLight: '#3ab3d9',      // Secondary gradient stop
-  backgroundTint: '#f2fbff',  // Light app background
-  surfaceBase: '#ffffff',     // Card / panel base
-  surfaceMuted: '#e4f4fb',    // Secondary card fill
-  borderSoft: '#c4deea',      // Soft border on light surfaces
-  textPrimary: '#0f2e3a',     // Main readable text on light surfaces
-  textSecondary: '#3f6170',   // Supporting text on light surfaces
+  darkAzure: '#07141B',       // Background / Deep Brand Base
+  azure: '#0C7FA6',           // Primary Accent / Buttons / Nav Bar
+  azureLight: '#2FD4FF',      // Route highlight / glow edge
+  backgroundTint: '#07141B',  // App shell background
+  surfaceBase: '#0C1B23',     // Card / panel base
+  surfaceMuted: '#122833',    // Secondary card fill
+  borderSoft: '#24414D',      // Soft border on dark surfaces
+  textPrimary: '#F3FBFF',     // Main readable text on dark surfaces
+  textSecondary: '#9DB5C2',   // Supporting text on dark surfaces
+  textTertiary: '#6F8793',    // Quiet meta text
+  routeTeal: '#2FD4FF',
+  routeBlue: '#62B8FF',
+  surfaceElevated: '#0F2027',
 
   // Status colors
-  grayGreen: '#31b87b',       // Safety / Availability
-  alarmRed: '#e53e3e',        // High-risk / Violations
-  orange: '#f28a2f',          // Medium-risk warning
+  grayGreen: '#31B87B',       // Safety / Availability
+  alarmRed: '#FF5B6E',        // High-risk / Violations
+  orange: '#FF9A4A',          // Medium-risk warning
 
   // Neutrals
   white: '#ffffff',
-  gray: '#9e9e9e',            // Unverified / Low-confidence pins
-  grayDark: '#4a4a4a',
-  overlayDark: 'rgba(9,39,52,0.84)',
-  overlayLight: 'rgba(255,255,255,0.78)',
+  gray: '#6F8793',            // Unverified / Low-confidence pins
+  grayDark: '#09151B',
+  overlayDark: 'rgba(3,10,14,0.88)',
+  overlayLight: 'rgba(12,27,35,0.78)',
 
   // Transparency helpers
-  alarmRedTranslucent: 'rgba(229,62,62,0.32)',
-  orangeTranslucent: 'rgba(242,138,47,0.3)',
-  grayGreenTranslucent: 'rgba(49,184,123,0.26)',
-  azureTranslucent: 'rgba(12,127,166,0.72)',
-  whiteTranslucent: 'rgba(255,255,255,0.72)',
-  focusRing: 'rgba(12,127,166,0.4)',
-  glowAzure: 'rgba(12,127,166,0.24)',
+  alarmRedTranslucent: 'rgba(255,91,110,0.24)',
+  orangeTranslucent: 'rgba(255,154,74,0.24)',
+  grayGreenTranslucent: 'rgba(49,184,123,0.22)',
+  azureTranslucent: 'rgba(12,127,166,0.28)',
+  whiteTranslucent: 'rgba(14,28,36,0.72)',
+  focusRing: 'rgba(47,212,255,0.35)',
+  glowAzure: 'rgba(47,212,255,0.22)',
   glowGreen: 'rgba(49,184,123,0.28)',
+  edgeHighlight: 'rgba(255,255,255,0.12)',
 };
 
 export const Gradients = {
-  brand: ['#0b6f93', '#2a98c2', '#65c4e4'],
-  coolGlass: ['rgba(255,255,255,0.92)', 'rgba(239,250,255,0.72)'],
-  heroSky: ['#e6f6fd', '#f5fbff'],
+  brand: ['#07141B', '#0B2B3A', '#0C7FA6'],
+  coolGlass: ['rgba(14,28,36,0.74)', 'rgba(18,38,48,0.82)'],
+  heroSky: ['#08161D', '#0E2430', '#13384A'],
+  routeGlow: ['#0C7FA6', '#2FD4FF'],
 };
 
 // ── Typography ─────────────────────────────────────────────────────────────────
@@ -57,16 +63,16 @@ const LETTER_SPACING = -0.94;
 export const Typography = {
   heading1: {
     fontFamily: FONT_FAMILY,
-    fontSize: 24,
-    lineHeight: Math.round(24 * 1.4),
+    fontSize: 30,
+    lineHeight: Math.round(30 * 1.2),
     letterSpacing: LETTER_SPACING,
     fontWeight: '700',
     color: Colors.white,
   },
   heading2: {
     fontFamily: FONT_FAMILY,
-    fontSize: 20,
-    lineHeight: Math.round(20 * 1.4),
+    fontSize: 24,
+    lineHeight: Math.round(24 * 1.25),
     letterSpacing: LETTER_SPACING,
     fontWeight: '700',
     color: Colors.white,
@@ -74,23 +80,23 @@ export const Typography = {
   heading3: {
     fontFamily: FONT_FAMILY,
     fontSize: 18,
-    lineHeight: Math.round(18 * 1.4),
+    lineHeight: Math.round(18 * 1.3),
     letterSpacing: LETTER_SPACING,
     fontWeight: '700',
     color: Colors.white,
   },
   body: {
     fontFamily: FONT_FAMILY,
-    fontSize: 14,
-    lineHeight: Math.round(14 * 1.4),
+    fontSize: 15,
+    lineHeight: Math.round(15 * 1.45),
     letterSpacing: LETTER_SPACING,
     fontWeight: '400',
     color: Colors.white,
   },
   bodyBold: {
     fontFamily: FONT_FAMILY,
-    fontSize: 14,
-    lineHeight: Math.round(14 * 1.4),
+    fontSize: 15,
+    lineHeight: Math.round(15 * 1.45),
     letterSpacing: LETTER_SPACING,
     fontWeight: '700',
     color: Colors.white,
@@ -98,7 +104,7 @@ export const Typography = {
   caption: {
     fontFamily: FONT_FAMILY,
     fontSize: 12,
-    lineHeight: Math.round(12 * 1.4),
+    lineHeight: Math.round(12 * 1.35),
     letterSpacing: LETTER_SPACING,
     fontWeight: '400',
     color: Colors.gray,
@@ -125,9 +131,10 @@ export const Spacing = {
 
 // ── Border Radius ──────────────────────────────────────────────────────────────
 export const Radius = {
-  sm: 6,
-  md: 12,
-  lg: 20,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 30,
   full: 9999,
 };
 

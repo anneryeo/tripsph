@@ -40,15 +40,16 @@ export default function NavigationModeScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
           <Text style={styles.backText}>Return</Text>
         </TouchableOpacity>
         <View style={styles.topCenter}>
-          <Text style={styles.navTitle}>Navigation Mode</Text>
-          <Text style={styles.destLabel}>to {DESTINATION.name}</Text>
+          <Text style={styles.navMeta}>Destination</Text>
+          <Text style={styles.navTitle}>{DESTINATION.name}</Text>
+          <Text style={styles.destLabel}>Guided route with ordinance awareness</Text>
         </View>
         <View style={{ width: 60 }} />
       </View>
@@ -74,7 +75,7 @@ export default function NavigationModeScreen({ navigation, route }) {
         <Text style={styles.placeholderSub}>Route and enforcement risk hints are shown on web while turn-by-turn map remains native-first.</Text>
       </View>
 
-      <View style={[styles.riskBanner, { backgroundColor: bannerColor }]}> 
+      <View style={[styles.riskBanner, { borderColor: bannerColor }]}> 
         <View style={styles.bannerContent}>
           <View style={[styles.bannerIcon, isHighRisk ? styles.bannerIconRisk : styles.bannerIconSafe]}>
             <Text style={styles.bannerIconText}>{isHighRisk ? '!' : 'OK'}</Text>
@@ -102,25 +103,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   backBtn: {
     width: 60,
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
+  },
+  navMeta: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   topCenter: {
     flex: 1,
     alignItems: 'center',
   },
   navTitle: {
-    ...Typography.bodyBold,
-    fontSize: 15,
+    ...Typography.heading3,
     color: Colors.textPrimary,
   },
   destLabel: {
@@ -132,7 +141,7 @@ const styles = StyleSheet.create({
     margin: Spacing.md,
     borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     backgroundColor: Colors.whiteTranslucent,
     alignItems: 'center',
     justifyContent: 'center',
@@ -144,8 +153,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
-    backgroundColor: '#e6f2ef',
+    borderColor: Colors.edgeHighlight,
+    backgroundColor: Colors.surfaceElevated,
     marginBottom: Spacing.md,
     position: 'relative',
     overflow: 'hidden',
@@ -156,7 +165,7 @@ const styles = StyleSheet.create({
     height: 6,
     top: '54%',
     left: '12%',
-    backgroundColor: Colors.azure,
+    backgroundColor: Colors.routeTeal,
     borderRadius: Radius.full,
     transform: [{ rotate: '-14deg' }],
   },
@@ -200,7 +209,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
   },
   etaTime: {
     fontSize: 22,
@@ -223,10 +232,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   riskBanner: {
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     minHeight: 80,
     justifyContent: 'center',
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderRadius: Radius.xl,
   },
   bannerContent: {
     flexDirection: 'row',
@@ -255,16 +269,16 @@ const styles = StyleSheet.create({
     ...Typography.bodyBold,
     fontSize: 15,
     lineHeight: 20,
-    color: Colors.white,
+    color: Colors.textPrimary,
   },
   bannerZone: {
     ...Typography.caption,
     marginTop: 2,
-    color: Colors.white,
+    color: Colors.textSecondary,
   },
   bannerSub: {
     ...Typography.caption,
     marginTop: 4,
-    color: Colors.white,
+    color: Colors.textTertiary,
   },
 });

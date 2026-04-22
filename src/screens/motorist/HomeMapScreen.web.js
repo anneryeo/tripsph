@@ -58,21 +58,22 @@ export default function HomeMapScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
         <TouchableOpacity onPress={handleReturn} style={styles.returnBtn} accessibilityRole="button" accessibilityLabel="Return">
           <Text style={styles.returnText}>Return</Text>
         </TouchableOpacity>
         <View style={styles.brandBlock}>
+          <Text style={styles.topEyebrow}>OIE live parking map</Text>
           <View style={styles.logoBadge}>
             <Image source={require('../../../assets/TRIPSPH-logo-white.png')} style={styles.logoImage} resizeMode="contain" />
           </View>
-          <Text style={styles.appSubtitle}>Live Risk Map (Web Prototype)</Text>
+          <Text style={styles.appSubtitle}>Metro Manila risk surface</Text>
         </View>
         <View style={styles.topRight}>
           <View style={[styles.wsDot, { backgroundColor: connected ? Colors.grayGreen : Colors.orange }]} />
-          <Text style={styles.wsLabel}>{connected ? 'OIE Live' : 'OIE Polling'}</Text>
+          <Text style={styles.wsLabel}>{connected ? 'Live' : 'Polling'}</Text>
         </View>
       </View>
 
@@ -112,7 +113,7 @@ export default function HomeMapScreen({ navigation }) {
       </View>
 
       <TouchableOpacity
-        style={[styles.banner, { backgroundColor: bannerColor }]}
+        style={[styles.banner, { borderColor: bannerColor }]}
         onPress={() => {
           if (verdict) {
             Alert.alert(
@@ -141,17 +142,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderBottomWidth: 0,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   returnBtn: {
     marginRight: Spacing.sm,
   },
   returnText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
+  },
+  topEyebrow: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 4,
   },
   appTitle: {
     display: 'none',
@@ -163,12 +175,12 @@ const styles = StyleSheet.create({
     width: 128,
     height: 34,
     borderRadius: Radius.md,
-    backgroundColor: Colors.azure,
+    backgroundColor: 'rgba(12,127,166,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.sm,
     borderWidth: 1,
-    borderColor: Colors.azureLight,
+    borderColor: Colors.edgeHighlight,
     marginBottom: 2,
   },
   logoImage: {
@@ -184,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.surfaceBase,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     borderRadius: Radius.full,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
@@ -206,9 +218,9 @@ const styles = StyleSheet.create({
   },
   mapPlaceholder: {
     flex: 1,
-    borderRadius: Radius.lg,
+    borderRadius: Radius.xl,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     backgroundColor: Colors.whiteTranslucent,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -219,15 +231,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
-    backgroundColor: '#e6f2ef',
+    borderColor: Colors.edgeHighlight,
+    backgroundColor: Colors.surfaceElevated,
     position: 'relative',
     overflow: 'hidden',
     marginBottom: Spacing.md,
   },
   road: {
     position: 'absolute',
-    backgroundColor: 'rgba(31,82,92,0.2)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
   roadHorizontal: {
     height: 20,
@@ -312,13 +324,16 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.sm,
     borderRadius: Radius.full,
     borderWidth: 1,
-    borderColor: Colors.white,
+    borderColor: 'rgba(255,255,255,0.18)',
+    alignItems: 'center',
   },
   navigateBtnText: {
     ...Typography.bodyBold,
     color: Colors.white,
   },
   banner: {
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     flexDirection: 'row',
@@ -326,16 +341,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     gap: Spacing.xs,
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderRadius: Radius.xl,
   },
   bannerText: {
     ...Typography.bodyBold,
-    color: Colors.white,
+    color: Colors.textPrimary,
     flex: 1,
     fontSize: 13,
   },
   bannerSub: {
     ...Typography.caption,
-    color: Colors.white,
+    color: Colors.textSecondary,
     fontSize: 11,
   },
 });

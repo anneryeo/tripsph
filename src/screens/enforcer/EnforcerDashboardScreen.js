@@ -142,7 +142,7 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
         <View>
@@ -278,10 +278,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   topTitle: {
     ...Typography.heading3,
@@ -303,7 +306,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: Radius.sm,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
   },
   statNum: {
     fontSize: 18,
@@ -316,9 +319,13 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: Colors.surfaceBase,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.full,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+    overflow: 'hidden',
   },
   toggleBtn: {
     flex: 1,
@@ -340,6 +347,9 @@ const styles = StyleSheet.create({
   mapContainer: {
     flex: 1,
     position: 'relative',
+    marginHorizontal: Spacing.md,
+    borderRadius: Radius.xl,
+    overflow: 'hidden',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -349,10 +359,10 @@ const styles = StyleSheet.create({
     top: Spacing.sm,
     right: Spacing.sm,
     backgroundColor: Colors.whiteTranslucent,
-    borderRadius: Radius.md,
+    borderRadius: Radius.lg,
     padding: Spacing.sm,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
   },
   zoomControls: {
     position: 'absolute',
@@ -366,7 +376,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     backgroundColor: Colors.whiteTranslucent,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -431,10 +441,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
-    backgroundColor: Colors.white,
-    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     overflow: 'hidden',
   },
   rowIndicator: {

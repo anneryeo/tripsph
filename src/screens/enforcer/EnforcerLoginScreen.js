@@ -55,9 +55,9 @@ export default function EnforcerLoginScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
       <LinearGradient
-        colors={Gradients.heroSky}
+        colors={Gradients.brand}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradientBg}
@@ -83,8 +83,9 @@ export default function EnforcerLoginScreen({ navigation }) {
           <View style={styles.shieldIcon}>
             <Text style={styles.shieldLabel}>E</Text>
           </View>
+          <Text style={styles.eyebrow}>Secure officer access</Text>
           <Text style={styles.title}>Enforcer Access</Text>
-          <Text style={styles.subtitle}>MMDA Authorized Personnel Only</Text>
+          <Text style={styles.subtitle}>Verified personnel only</Text>
         </View>
 
         {/* ── Form ── */}
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
   },
   backText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
   },
   iconWrap: {
     alignItems: 'center',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
     borderWidth: 1,
-    borderColor: Colors.azureLight,
+    borderColor: Colors.edgeHighlight,
     shadowColor: Colors.darkAzure,
     shadowOpacity: 0.14,
     shadowRadius: 18,
@@ -189,7 +190,7 @@ const styles = StyleSheet.create({
     width: 74,
     height: 74,
     borderRadius: Radius.lg,
-    backgroundColor: Colors.glowAzure,
+    backgroundColor: 'rgba(47,212,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.md,
@@ -199,25 +200,31 @@ const styles = StyleSheet.create({
   shieldLabel: {
     fontSize: 26,
     fontWeight: '800',
-    color: Colors.azure,
+    color: Colors.routeTeal,
+  },
+  eyebrow: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    textTransform: 'uppercase',
+    letterSpacing: 1.1,
+    marginBottom: Spacing.xs,
   },
   title: {
     ...Typography.heading1,
     color: Colors.textPrimary,
   },
   subtitle: {
-    ...Typography.caption,
-    color: Colors.orange,
+    ...Typography.body,
+    color: Colors.textSecondary,
     marginTop: Spacing.xs,
-    letterSpacing: 1,
   },
   form: {
-    backgroundColor: 'rgba(255,255,255,0.78)',
+    backgroundColor: Colors.whiteTranslucent,
     borderRadius: Radius.lg,
     padding: Spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.6)',
-    shadowColor: Colors.darkAzure,
+    borderColor: Colors.edgeHighlight,
+    shadowColor: Colors.routeTeal,
     shadowOpacity: 0.12,
     shadowRadius: 24,
     shadowOffset: { width: 0, height: 8 },
@@ -230,7 +237,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: Colors.surfaceBase,
-    borderRadius: Radius.sm,
+    borderRadius: Radius.md,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     color: Colors.textPrimary,
@@ -241,13 +248,15 @@ const styles = StyleSheet.create({
   loginBtn: {
     marginTop: Spacing.xl,
     backgroundColor: Colors.azure,
-    borderRadius: Radius.md,
+    borderRadius: Radius.full,
     paddingVertical: Spacing.md,
     alignItems: 'center',
-    shadowColor: Colors.darkAzure,
-    shadowOpacity: 0.18,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 5 },
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+    shadowColor: Colors.routeTeal,
+    shadowOpacity: 0.22,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
     elevation: 3,
   },
   loginBtnText: {
@@ -259,6 +268,6 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     textAlign: 'center',
     marginTop: Spacing.lg,
-    color: Colors.textSecondary,
+    color: Colors.textTertiary,
   },
 });

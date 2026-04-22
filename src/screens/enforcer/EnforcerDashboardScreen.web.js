@@ -61,7 +61,7 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.backgroundTint} />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.backgroundTint} />
 
       <View style={styles.topBar}>
         <View style={styles.headerLeft}>
@@ -136,10 +136,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.overlayLight,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    margin: Spacing.md,
+    marginBottom: 0,
   },
   headerLeft: {
     flex: 1,
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
   },
   returnText: {
     ...Typography.bodyBold,
-    color: Colors.azure,
+    color: Colors.routeTeal,
     fontSize: 13,
   },
   topTitle: {
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: Radius.sm,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
   },
   statNum: {
     fontSize: 18,
@@ -186,9 +189,13 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: Colors.surfaceBase,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderSoft,
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.full,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+    overflow: 'hidden',
   },
   toggleBtn: {
     flex: 1,
@@ -210,9 +217,9 @@ const styles = StyleSheet.create({
   mapPlaceholder: {
     flex: 1,
     margin: Spacing.md,
-    borderRadius: Radius.lg,
+    borderRadius: Radius.xl,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     backgroundColor: Colors.whiteTranslucent,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -223,8 +230,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
-    backgroundColor: '#e6f2ef',
+    borderColor: Colors.edgeHighlight,
+    backgroundColor: '#10242d',
     marginBottom: Spacing.md,
     overflow: 'hidden',
     position: 'relative',
@@ -276,7 +283,7 @@ const styles = StyleSheet.create({
     bottom: Spacing.sm,
     backgroundColor: Colors.whiteTranslucent,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     borderRadius: Radius.sm,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 4,
@@ -309,10 +316,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
-    backgroundColor: Colors.white,
-    borderRadius: Radius.md,
+    backgroundColor: Colors.whiteTranslucent,
+    borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.borderSoft,
+    borderColor: Colors.edgeHighlight,
     overflow: 'hidden',
   },
   rowIndicator: {
