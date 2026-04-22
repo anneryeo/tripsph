@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Circle, Marker } from 'react-native-maps';
@@ -29,10 +30,10 @@ const DEFAULT_REGION = {
 
 const TAB_BAR_CLEARANCE = 96;
 
-function ParkingMarker({ structure }) {
+function ParkingMarker({ structure, selected }) {
   const full = structure.occupancy >= 90;
   return (
-    <View style={[styles.parkingMarker, full && styles.parkingMarkerFull]}>
+    <View style={[styles.parkingMarker, full && styles.parkingMarkerFull, selected && styles.parkingMarkerSelected]}>
       <Text style={styles.parkingMarkerP}>P</Text>
       <Text style={styles.parkingMarkerOcc}>{structure.occupancy}%</Text>
     </View>
@@ -45,6 +46,8 @@ export default function HomeMapScreen({ navigation }) {
   const [lastRefresh, setLastRefresh] = useState(null);
   const [connected, setConnected] = useState(false);
   const [mapRegion, setMapRegion] = useState(DEFAULT_REGION);
+  const [selectedParkingId, setSelectedParkingId] = useState(null);
+  const [showAvailableOnly, setShowAvailableOnly] = useState(true);
   const zones = getOrdinanceZones();
   const mapRef = useRef(null);
   const refreshTimer = useRef(null);
@@ -104,6 +107,28 @@ export default function HomeMapScreen({ navigation }) {
     ? getBannerText(verdict.verdict)
     : 'Querying Ordinance Intelligence Engine...';
 
+  const visibleParking = [...PARKING_STRUCTURES]
+    .filter((spot) => (showAvailableOnly ? spot.occupancy < 90 : true))
+    .sort((a, b) => a.occupancy - b.occupancy);
+
+  const getParkingStatus = (occupancy) => {
+    if (occupancy >= 90) return 'Full';
+    if (occupancy >= 75) return 'Limited';
+    return 'Available';
+  };
+
+  const focusParking = (spot) => {
+    setSelectedParkingId(spot.id);
+    const nextRegion = {
+      latitude: spot.coordinate.latitude,
+      longitude: spot.coordinate.longitude,
+      latitudeDelta: 0.02,
+      longitudeDelta: 0.02,
+    };
+    mapRef.current?.animateToRegion(nextRegion, 220);
+    setMapRegion(nextRegion);
+  };
+
   const zoomMap = (factor) => {
     if (!mapRef.current || !mapRegion) return;
     const nextRegion = {
@@ -131,6 +156,10 @@ export default function HomeMapScreen({ navigation }) {
           <View style={[styles.wsDot, { backgroundColor: connected ? Colors.grayGreen : Colors.orange }]} />
           <Text style={styles.wsLabel}>{connected ? 'Live' : 'Polling'}</Text>
         </View>
+      </View>
+
+      <View style={styles.goalStrip}>
+        <Text style={styles.goalText}>Find legal nearby parking, then start navigation to your chosen spot.</Text>
       </View>
 
       <View style={styles.mapContainer}>
@@ -171,7 +200,7 @@ export default function HomeMapScreen({ navigation }) {
               title={ps.name}
               description={`${ps.occupancy}% Full | ${ps.rate}`}
             >
-              <ParkingMarker structure={ps} />
+              <ParkingMarker structure={ps} selected={selectedParkingId === ps.id} />
             </Marker>
           ))}
         </MapView>
@@ -222,6 +251,39 @@ export default function HomeMapScreen({ navigation }) {
         >
           <Text style={styles.navigateBtnText}>Start Navigation</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.parkingPanel}>
+        <View style={styles.parkingPanelHeader}>
+          <Text style={styles.parkingPanelTitle}>Nearby Parking</Text>
+          <TouchableOpacity
+            style={styles.filterChip}
+            onPress={() => setShowAvailableOnly((prev) => !prev)}
+            accessibilityRole="button"
+            accessibilityLabel="Toggle available parking filter"
+          >
+            <Text style={styles.filterChipText}>{showAvailableOnly ? 'Available only' : 'Show all'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.parkingCardsRow}>
+          {visibleParking.map((spot) => (
+            <TouchableOpacity
+              key={spot.id}
+              style={[styles.parkingCard, selectedParkingId === spot.id && styles.parkingCardActive]}
+              onPress={() => focusParking(spot)}
+              accessibilityRole="button"
+              accessibilityLabel={`Focus ${spot.name}`}
+            >
+              <Text style={styles.parkingName} numberOfLines={1}>{spot.name}</Text>
+              <Text style={styles.parkingMeta}>{spot.occupancy}% occupied - {getParkingStatus(spot.occupancy)}</Text>
+              <Text style={styles.parkingMeta}>{spot.rate}</Text>
+            </TouchableOpacity>
+          ))}
+          {visibleParking.length === 0 && (
+            <Text style={styles.parkingEmpty}>No open spots right now. Toggle to Show all to browse full car parks.</Text>
+          )}
+        </ScrollView>
       </View>
 
       <TouchableOpacity
@@ -328,6 +390,20 @@ const styles = StyleSheet.create({
   wsLabel: {
     ...Typography.caption,
     color: Colors.textPrimary,
+  },
+  goalStrip: {
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+  },
+  goalText: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
   },
   mapContainer: {
     flex: 1,
@@ -442,6 +518,10 @@ const styles = StyleSheet.create({
   parkingMarkerFull: {
     borderColor: Colors.orange,
   },
+  parkingMarkerSelected: {
+    borderColor: Colors.routeTeal,
+    borderWidth: 2,
+  },
   parkingMarkerP: {
     fontSize: 16,
     fontWeight: '900',
@@ -451,6 +531,70 @@ const styles = StyleSheet.create({
     ...Typography.caption,
     fontSize: 10,
     color: Colors.grayGreen,
+  },
+  parkingPanel: {
+    marginHorizontal: Spacing.md,
+    marginTop: Spacing.sm,
+    backgroundColor: Colors.overlayLight,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.xl,
+    paddingVertical: Spacing.sm,
+  },
+  parkingPanelHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.md,
+    marginBottom: Spacing.xs,
+  },
+  parkingPanelTitle: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+  },
+  filterChip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 5,
+    borderRadius: Radius.full,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    backgroundColor: Colors.surfaceBase,
+  },
+  filterChipText: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
+    fontWeight: '700',
+  },
+  parkingCardsRow: {
+    paddingHorizontal: Spacing.md,
+    gap: Spacing.sm,
+  },
+  parkingCard: {
+    width: 182,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.lg,
+    backgroundColor: Colors.surfaceBase,
+    padding: Spacing.sm,
+  },
+  parkingCardActive: {
+    borderColor: Colors.routeTeal,
+    backgroundColor: Colors.surfaceMuted,
+  },
+  parkingName: {
+    ...Typography.bodyBold,
+    color: Colors.textPrimary,
+    marginBottom: 3,
+  },
+  parkingMeta: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+  },
+  parkingEmpty: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    width: 240,
+    paddingVertical: Spacing.sm,
   },
   banner: {
     margin: Spacing.md,

@@ -112,7 +112,7 @@ function ReportRow({ report, onPress }) {
 export default function EnforcerDashboardScreen({ navigation, route }) {
   const enforcerId = route.params?.enforcerId ?? 'ENFORCER';
   const [reports] = useState(MOCK_REPORTS);
-  const [view, setView] = useState('map');
+  const [view, setView] = useState('list');
   const [mapRegion, setMapRegion] = useState(INITIAL_REGION);
   const zones = getOrdinanceZones();
   const mapRef = React.useRef(null);
@@ -128,6 +128,7 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
   const orderedReports = [...reports].sort(
     (a, b) => b.aiVerified - a.aiVerified || new Date(b.timestamp) - new Date(a.timestamp),
   );
+  const nextPriorityReport = orderedReports[0] ?? null;
 
   const zoomMap = (factor) => {
     if (!mapRef.current || !mapRegion) return;
@@ -177,6 +178,28 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
           accessibilityLabel="Show queue view"
         >
           <Text style={[styles.toggleText, view === 'list' && styles.toggleTextActive]}>QUEUE</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.workflowHint}>Tip: Start in QUEUE for triage, then switch to MAP for area hotspots.</Text>
+
+      <View style={styles.quickActionsRow}>
+        <TouchableOpacity
+          style={[styles.quickActionBtn, !nextPriorityReport && styles.quickActionBtnDisabled]}
+          onPress={() => nextPriorityReport && openReport(nextPriorityReport)}
+          disabled={!nextPriorityReport}
+          accessibilityRole="button"
+          accessibilityLabel="Open next priority case"
+        >
+          <Text style={styles.quickActionText}>Open Next Case</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.quickActionBtn, styles.quickActionBtnSecondary]}
+          onPress={() => setView('map')}
+          accessibilityRole="button"
+          accessibilityLabel="Switch to hotspot map"
+        >
+          <Text style={styles.quickActionText}>View Hotspot Map</Text>
         </TouchableOpacity>
       </View>
 
@@ -260,7 +283,7 @@ export default function EnforcerDashboardScreen({ navigation, route }) {
           renderItem={({ item }) => <ReportRow report={item} onPress={() => openReport(item)} />}
           contentContainerStyle={{ paddingBottom: Spacing.xxl }}
           ListHeaderComponent={
-            <Text style={styles.queueHeader}>Ordered by priority · {pendingCount} pending</Text>
+            <Text style={styles.queueHeader}>Ordered by urgency · Tap a case to open details · {pendingCount} pending</Text>
           }
         />
       )}
@@ -342,6 +365,38 @@ const styles = StyleSheet.create({
   },
   toggleTextActive: {
     color: Colors.azure,
+    fontWeight: '700',
+  },
+  workflowHint: {
+    ...Typography.caption,
+    color: Colors.textSecondary,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  quickActionsRow: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    marginHorizontal: Spacing.md,
+    marginBottom: Spacing.sm,
+  },
+  quickActionBtn: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: Colors.edgeHighlight,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.surfaceBase,
+    paddingVertical: Spacing.sm,
+    alignItems: 'center',
+  },
+  quickActionBtnSecondary: {
+    backgroundColor: Colors.surfaceMuted,
+  },
+  quickActionBtnDisabled: {
+    opacity: 0.5,
+  },
+  quickActionText: {
+    ...Typography.caption,
+    color: Colors.routeTeal,
     fontWeight: '700',
   },
   mapContainer: {
