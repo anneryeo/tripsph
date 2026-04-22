@@ -8,10 +8,10 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Circle, Marker } from 'react-native-maps';
 
 import { Colors, Typography, Spacing, Radius, OIEVerdict, Targets } from '../../constants/theme';

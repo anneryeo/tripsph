@@ -8,13 +8,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
   ScrollView,
   Alert,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors, Typography, Spacing, Radius, Targets } from '../../constants/theme';
 import { issueNCAPViolation } from '../../services/AIReportService';
