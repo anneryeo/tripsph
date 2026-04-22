@@ -95,7 +95,7 @@ export default function ReportingFlowScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      <StatusBar barStyle="light-content" backgroundColor="#000000" translucent={false} />
 
       <CameraView ref={cameraRef} style={styles.camera} facing="back" flash={flash}>
         <View style={styles.overlay}>
